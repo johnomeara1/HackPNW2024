@@ -133,8 +133,8 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
     let parsedTypeArr = parsedType.toString().split(',');
     let parsedDiffArr = parsedDiff.toString().split(',');
 
+    // use count later
     let count = reqdata.questionCount;
-    let officialQuestionList = [];
     let allQuestions = [];
 
     // Loop through parsed types
@@ -158,7 +158,7 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
 
     ROOMS[roomID] = {
         "users" : {},
-        "questions" : officialQuestionList
+        "questions" : allQuestions
     };
 
     // BEFORE THIS POINT IS GENERATING QUESTIONS
