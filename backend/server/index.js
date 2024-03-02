@@ -7,6 +7,14 @@ const dbclient = new MongoClient("mongodb://localhost:27017/");
 let conn;
 let db;
 
+var uid = new ShortUniqueId({
+    dictionary: "abcdefghijklmnopqrstuvwxyz".toUpperCase().split(""),
+});
+
+// or using default dictionaries available since v4.3+
+
+var uid = new ShortUniqueId({ dictionary: 'hex' });
+
 let ROOMS = {
 
 };
@@ -60,18 +68,12 @@ async function connectMongo() {
 // Mongo querying function
 async function queryMongo (query, collectionName) {
     const dbresult = await db.collection(collectionName).find(query);
-    let results = []
-    let i = 0;
+    let results = [];
 
     for await (const doc of dbresult) {
-        console.log(doc);
         results.push(doc);
-
-        console.log(results[i]);
-        i += 1;
     }
 
-    //console.log(results[0]);
     return results;
 }
 
@@ -130,14 +132,6 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
     let parsedType = JSON.parse(type);
     let parsedTypeArr = parsedType.toString().split(',');
     let parsedDiffArr = parsedDiff.toString().split(',');
-    
-    parsedDiffArr.forEach(element  => {
-        console.log("ELEMENT: " + element);
-    });
-    
-    parsedTypeArr.forEach(element => {
-        console.log("TYPE: " + element);
-    });
 
     let count = reqdata.questionCount;
     let officialQuestionList = [];
@@ -145,25 +139,30 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
 
     // Loop through parsed types
     for (let ty of parsedTypeArr) {
+        console.log("TYPE: " + ty);
         let currQuery = await queryMongo({
             "difficulty" : { $in: parsedDiffArr }
         }, ty);
         allQuestions.push(currQuery);
     }
-    
-    console.log(allQuestions);
 
-    for (let i = 0; i < count; i++) {
-        let problem = randint(0, 4);
-        officialQuestionList.push(allQuestions[problem]);    
+    res.status(200).send(allQuestions);
+
+    let roomID = "";
+
+    while (true) {
+        roomID = uid(4);
+        if (ROOMS[roomID] === undefined && roomID != "") {
+            break;
+        }
     }
 
-    console.log("All your questions can be seen below!!");
-    console.log(officialQuestionList);
+    ROOMS[roomID] = {
+        "users" : {},
+        "questions" : officialQuestionList
+    };
 
-    res.status(200).send(officialQuestionList);
-
-    // Create a room ID
+    // BEFORE THIS POINT IS GENERATING QUESTIONS
 });
 
 
