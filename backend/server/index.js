@@ -160,7 +160,8 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
 
     ROOMS[roomID] = {
         "users" : {},
-        "questions" : allQuestions
+        "questions" : allQuestions,
+        "roomID": roomID
     };
 
     // BEFORE THIS POINT IS GENERATING QUESTIONS
