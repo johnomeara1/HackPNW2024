@@ -183,7 +183,9 @@ app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, 
     let correctAns = false;
     if (ROOMS[roomID]["questions"][questionNumber]["answer"] == answer) {
         correctAns = true;
+        ROOMS[roomID]["users"][player]["points"]++;
     } 
+
     res.status(200).json({
         "correct" : correctAns 
     });
