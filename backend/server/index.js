@@ -142,13 +142,12 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
     // BEFORE THIS POINT IS GENERATING QUESTIONS
 });
 
-
 app.listen(port, () => {
     console.log(`Server's up, running on port ${port}`);
     connectMongo();
 });
 
-app.get("/game/submitAnswer/:roomID/:player/:letter", async (req, res) => {
+app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, res) => {
     let roomID = req.params.roomID;
     let answer = req.params.letter;
     let player = req.params.player;
