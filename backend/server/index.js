@@ -131,7 +131,6 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
 
     // Loop through parsed types
     for (let ty of parsedTypeArr) {
-        console.log("TYPE: " + ty);
         let currQuery = await queryMongo({
             "difficulty" : { $in: parsedDiffArr }
         }, ty);
