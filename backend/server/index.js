@@ -4,6 +4,8 @@ const app = express();
 const port = 3000;
 const dbclient = new MongoClient("mongodb://localhost:27017/");
 
+const ShortUniqueId = require('short-unique-id');
+
 let conn;
 let db;
 
