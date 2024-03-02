@@ -199,3 +199,21 @@ app.get("/game/status/:roomID", async (req, res) => {
 
     res.status(200).json(ROOMS[roomID]);
 });
+
+app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
+    let roomID = req.params.roomID;
+    let player = req.params.player;
+    if (ROOMS[roomID] === undefined) {
+        res.status(200).send("Room not found.");
+        return;
+    }
+
+    ROOMS[roomID]["users"][player] = {
+        "username" : player,
+        "id" : uid(8),
+        "points" : 0,
+        "questionNumber" : 0
+    };
+
+    res.status(200).send("Joined room.");
+});
