@@ -28,18 +28,12 @@ async function connectMongo() {
 // Mongo querying function
 async function queryMongo (query, collectionName) {
     const dbresult = await db.collection(collectionName).find(query);
-    let results = []
-    let i = 0;
+    let results = [];
 
     for await (const doc of dbresult) {
-        console.log(doc);
         results.push(doc);
-
-        console.log(results[i]);
-        i += 1;
     }
 
-    //console.log(results[0]);
     return results;
 }
 
@@ -98,14 +92,6 @@ app.get("/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCount/",
     let parsedType = JSON.parse(type);
     let parsedTypeArr = parsedType.toString().split(',');
     let parsedDiffArr = parsedDiff.toString().split(',');
-    
-    parsedDiffArr.forEach(element  => {
-        console.log("ELEMENT: " + element);
-    });
-    
-    parsedTypeArr.forEach(element => {
-        console.log("TYPE: " + element);
-    });
 
     let count = reqdata.questionCount;
     let officialQuestionList = [];
@@ -113,23 +99,21 @@ app.get("/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCount/",
 
     // Loop through parsed types
     for (let ty of parsedTypeArr) {
+        console.log("TYPE: " + ty);
         let currQuery = await queryMongo({
             "difficulty" : { $in: parsedDiffArr }
         }, ty);
         allQuestions.push(currQuery);
     }
-    
-    console.log(allQuestions);
 
     for (let i = 0; i < count; i++) {
         let problem = randint(0, 4);
         officialQuestionList.push(allQuestions[problem]);    
     }
 
-    console.log("All your questions can be seen below!!");
-    console.log(officialQuestionList);
-
     res.status(200).send(officialQuestionList);
+
+    // BEFORE THIS POINT IS GENERATING QUESTIONS
 });
 
 
@@ -138,7 +122,7 @@ app.listen(port, () => {
     connectMongo();
 });
 
-app.listen("/submitAnswer/:room/:letter", async (req, res) => {
+app.get("/submitAnswer/:room/letter/:letter", async (req, res) => {
 
 });
 
