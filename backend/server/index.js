@@ -9,13 +9,11 @@ const ShortUniqueId = require('short-unique-id');
 let conn;
 let db;
 
-var uid = new ShortUniqueId({
+const uid = new ShortUniqueId({
     dictionary: "abcdefghijklmnopqrstuvwxyz".toUpperCase().split(""),
 });
 
 // or using default dictionaries available since v4.3+
-
-var uid = new ShortUniqueId({ dictionary: 'hex' });
 
 let ROOMS = {
 
