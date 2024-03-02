@@ -1,0 +1,17 @@
+{
+  "name": "hackpnw-spring-2024",
+  "version": "1.0.0",
+  "description": "Hackpnw spring 2024 package",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.18.3",
+    "mongodb": "^6.4.0",
+    "socket.io-client": "^4.7.4"
+  },
+  "scripts": {
+    "test": "node index.js",
+    "start": "node index.js"
+  },
+  "author": "Berkan Mertan",
+  "license": "ISC"
+}
