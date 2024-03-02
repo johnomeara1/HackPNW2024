@@ -119,7 +119,7 @@ app.get("/getData/:collectionName/query/:query", async (req, res) => {
 // Makes a room, prepares the questions for everyone to use, creates a room ID for people to connect to
 // via socket IO, which comes later.
 
-app.get("/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCount/", async (req, res) => {
+app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCount/", async (req, res) => {
     let reqdata = req.params;
     let diff = reqdata.diff;
     let name = reqdata.name;
@@ -162,6 +162,8 @@ app.get("/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCount/",
     console.log(officialQuestionList);
 
     res.status(200).send(officialQuestionList);
+
+    // Create a room ID
 });
 
 
