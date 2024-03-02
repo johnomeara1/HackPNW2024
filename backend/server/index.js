@@ -170,7 +170,7 @@ app.listen(port, () => {
     connectMongo();
 });
 
-app.get("/submitAnswer/:roomID/:player/:letter", async (req, res) => {
+app.get("/game/submitAnswer/:roomID/:player/:letter", async (req, res) => {
     let roomID = req.params.roomID;
     let answer = req.params.letter;
     let player = req.params.player;
@@ -191,4 +191,12 @@ app.get("/submitAnswer/:roomID/:player/:letter", async (req, res) => {
     ROOMS[roomID]["users"][player]["questionNumber"]++;
 });
 
+app.get("/game/status/:roomID", async (req, res) => {
+    let roomID = req.params.roomID;
+    if (ROOMS[roomID] === undefined) {
+        res.status(200).send("Room not found.");
+        return;
+    }
 
+    res.status(200).json(ROOMS[roomID]);
+});
