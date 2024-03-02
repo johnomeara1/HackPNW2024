@@ -7,6 +7,38 @@ const dbclient = new MongoClient("mongodb://localhost:27017/");
 let conn;
 let db;
 
+let ROOMS = {
+
+};
+
+/*
+    Room data structure:
+    {
+        "roomID" : [
+            "users": [
+                {
+                    "username" : "Adi!",
+                    "id" : "alks;dfj8783274u2",
+                    "points" : 0,
+                    "questionIndex": 1
+                }
+            ],
+            "questions" : [
+                {
+                    "passage" : "| Species | Bare ground | Patches of vegetation | Total | Percent found in patches of vegetation |\n|--------------|-------------|-----------------------|-------|-----------------------------------------|\n| T. moroderi | 9 | 13 | 22 | 59.1% |\n| T. libanitis | 83 | 120 | 203 | 59.1% |\n| H. syriacim | 95 | 106 | 201 | 52.7% |\n| H. squamatum | 218 | 321 | 539 | 59.6% |\n| H. stoechas | 11 | 12 | 23 | 52.2% |\n",
+                    "prompt" : "Alicia Montesinos-Navarro, Isabelle Storer, and Rocío Perez-Barrales recently examined several plots within a diverse plant community in southeast Spain. The researchers calculated that if individual plants were randomly distributed on this particular landscape, only about 15% would be with other plants in patches of vegetation. They counted the number of juvenile plants of five species growing in patches of vegetation and the number growing alone on bare ground and compared those numbers to what would be expected if the plants were randomly distributed. Based on these results, they claim that plants of these species that grow in close proximity to other plants gain an advantage at an early developmental stage. Which choice best describes data from the table that support the researchers’ claim?",
+                    "A" : "For all five species, less than 75% of juvenile plants were growing in patches of vegetation.",
+                    "B" : "The species with the greatest number of juvenile plants growing in patches of vegetation was H. stoechas.",
+                    "C": "For T. libanitis and T. moroderi, the percentage of juvenile plants growing in patches of vegetation was less than what would be expected if plants were randomly distributed.",
+                    "D": "For each species, the percentage of juvenile plants growing in patches of vegetation was substantially higher than what would be expected if plants were randomly distributed.",
+                    "answer" : "D",
+                    "test_type" : "ELA"
+                }
+            ],
+        ],
+    }
+*/
+
 // Random number generator
 function randint(min, max) {
     const minCeiled = Math.ceil(min);
@@ -138,8 +170,25 @@ app.listen(port, () => {
     connectMongo();
 });
 
-app.listen("/submitAnswer/:room/:letter", async (req, res) => {
+app.get("/submitAnswer/:roomID/:player/:letter", async (req, res) => {
+    let roomID = req.params.roomID;
+    let answer = req.params.letter;
+    let player = req.params.player;
+    let questionNumber = ROOMS[roomID]["users"][player]["questionNumber"]; 
 
+    if (ROOMS[roomID] === undefined) {
+        res.status(200).send("Room not found.");
+        return;
+    }
+
+    let correctAns = false;
+    if (ROOMS[roomID]["questions"][questionNumber]["answer"] == answer) {
+        correctAns = true;
+    } 
+    res.status(200).json({
+        "correct" : correctAns 
+    });
+    ROOMS[roomID]["users"][player]["questionNumber"]++;
 });
 
 
