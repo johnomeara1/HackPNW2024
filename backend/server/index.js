@@ -32,6 +32,14 @@ let ROOMS = {
                     "questionIndex": 1
                 }
             ],
+            "chatlogs" : [
+                {
+                    "username" : "Berkan!",
+                    "id" : "asdfads",
+                    "date" : "Jan 1234",
+                    "message" : "YOOOO GANG"
+                }
+            ]
             "questions" : [
                 {
                     "passage" : "| Species | Bare ground | Patches of vegetation | Total | Percent found in patches of vegetation |\n|--------------|-------------|-----------------------|-------|-----------------------------------------|\n| T. moroderi | 9 | 13 | 22 | 59.1% |\n| T. libanitis | 83 | 120 | 203 | 59.1% |\n| H. syriacim | 95 | 106 | 201 | 52.7% |\n| H. squamatum | 218 | 321 | 539 | 59.6% |\n| H. stoechas | 11 | 12 | 23 | 52.2% |\n",
@@ -157,6 +165,7 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
 
     ROOMS[roomID] = {
         "users" : {},
+        "chatlogs" : [],
         "questions" : allQuestions,
         "roomID": roomID
     };
@@ -208,9 +217,35 @@ app.get("/game/status/:roomID", async (req, res) => {
     res.status(200).json(ROOMS[roomID]);
 });
 
-app.get("/game/chat/:chatMessage/player/:player/room/:room", async (req, res) => {
+app.get("/game/postChat/:chatMessage/player/:player/room/:roomID", async (req, res) => {
     let data = req.params;
     let msg = data.chatMessage;
+    let timestamp = new Date();
+    let roomID = data.roomID;
+    let player = data.player;
+
+    if (ROOMS[roomID] === undefined) {
+        res.status(404).json({"message": "Room not found."});
+        return;
+    }
+
+    if (ROOMS[roomID]["users"][player] === undefined ) {
+        res.status(404).json({"message": "User not found."});
+        return;
+    }
+    
+    let newMessage = {
+        "username" : player,
+        "timestamp" : timestamp,
+        "message" : msg
+    };
+
+    ROOMS[roomID]["chatlogs"].push(newMessage);
+    res.status(200).json({"message": `Entered message.`});
+});
+
+app.get("/game/getChat/:roomID", async (req, res) => {
+    res.status(200).send(ROOMS[req.params.roomID]["chatlogs"]);
 });
 
 app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
