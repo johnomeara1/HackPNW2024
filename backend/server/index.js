@@ -189,7 +189,6 @@ io.on("connection", (socket) => {
         };
 
         socket.emit("roomData", ROOMS[roomID]);
-        console.log("ROOM CODE: " + roomID);
     });
 
     socket.on("getRoomData", (roomID) => {

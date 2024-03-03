@@ -8,6 +8,9 @@ const socket = io.connect(URL, {
   reconnect: true
 });
 
+let roomQuestions = [];
+let globalRoomId;
+
 var roomResponseFunction = function (data) {
   console.log(data);
 };
@@ -22,6 +25,9 @@ socket.on("connect", () => {
 
   socket.on("roomData", (data) => { 
     alert("ROOM'S DATA: " + JSON.stringify(data));
+    // in case other one doesn't work
+    globalRoomId = data["roomID"];
+    roomQuestions = data["questions"];
   });
 
   socket.on("newMessage", (msg) => {
@@ -73,7 +79,14 @@ export function makeRoom() {
 }
 
 export function makeRoomClient (name, difficulty, testType, num) {
+  let roomIdReturnCode;
   socket.emit("makeRoom", { name, difficulty, testType, num });
+
+  socket.on('roomData', (response) => {
+    roomIdReturnCode = response["roomID"];
+  });
+
+  return roomIdReturnCode;
 }
 
 export function submitAnswer(roomID, player, letter) {
