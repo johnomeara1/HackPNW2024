@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@traptitech/markdown-it-katex": "^3.6.0",
     "markdown-it": "^14.0.0",
     "vue": "^3.4.19"
   },

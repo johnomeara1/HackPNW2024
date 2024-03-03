@@ -220,6 +220,11 @@ app.get("/game/status/:roomID", async (req, res) => {
     res.status(200).json(ROOMS[roomID]);
 });
 
+app.get("/game/chat/:chatMessage/player/:player/room/:room", async (req, res) => {
+    let data = req.params;
+    let msg = data.chatMessage;
+});
+
 app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
     let roomID = req.params.roomID;
     let player = req.params.player;
