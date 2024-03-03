@@ -1,4 +1,5 @@
 <script setup>
+import './client.js';
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';
 import math_plugin from '@traptitech/markdown-it-katex';

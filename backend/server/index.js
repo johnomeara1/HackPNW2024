@@ -1,18 +1,94 @@
 const MongoClient = require('mongodb').MongoClient;
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const port = 3000;
-const dbclient = new MongoClient("mongodb://localhost:27017/");
+
+app.use(cors());
 
 const ShortUniqueId = require('short-unique-id');
 
 let conn;
 let db;
 
+const https = require('http');
+const server = https.createServer(app).listen(port);
+const io = require("socket.io")(server, {
+    allowEIO3: true,
+    handlePreflightRequest: (req, res) => {
+        const headers = {
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Origin": "*", //or the specific origin you want to give access to,
+            "Access-Control-Allow-Credentials": true
+        };
+        res.writeHead(200, headers);
+        res.end();
+    },
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+        credentials: true 
+    }
+});
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
+io.on("connection", (socket) => {
+    console.log("A user connected.");
+    socket.on("disconnect", () => {
+        console.log("A user disconnected.");
+    });
+
+    // set stuff for joining
+    socket.on("join", (roomID) => {
+        socket.join(roomID);
+        console.log("Joined room " + roomID);
+    });
+
+    socket.on("chat", (msg) => {
+        console.log("Chat message: " + msg);
+    });
+
+    socket.on("submitAnswer", (data) => {
+        console.log("Answer submitted: " + data);
+    });
+
+    socket.on("status", (roomID) => {
+        console.log("Status requested for room " + roomID);
+    });
+
+    socket.on("joinRoom", (roomID) => {
+        console.log("Joining room " + roomID);
+    });
+
+    socket.on("leaderboard", (roomID) => {
+        console.log("Leaderboard requested for room " + roomID);
+    });
+
+    socket.on("makeRoom", (data) => {
+        console.log9("Room made: " + data);
+    });
+
+    socket.on("getQuestion", (roomID) => {
+        console.log("Question requested for room " + roomID);
+    });
+});
+
+io.on("join", (roomID) => {
+    console.log("HEY")
+});
+
 const uid = new ShortUniqueId({
     dictionary: "abcdefghijklmnopqrstuvwxyz".toUpperCase().split(""),
     length: 4
 });
+
+const dbclient = new MongoClient("mongodb://localhost:27017/");
 
 // or using default dictionaries available since v4.3+
 
@@ -32,6 +108,14 @@ let ROOMS = {
                     "questionIndex": 1
                 }
             ],
+            "chatlogs" : [
+                {
+                    "username" : "Berkan!",
+                    "id" : "asdfads",
+                    "date" : "Jan 1234",
+                    "message" : "YOOOO GANG"
+                }
+            ]
             "questions" : [
                 {
                     "passage" : "| Species | Bare ground | Patches of vegetation | Total | Percent found in patches of vegetation |\n|--------------|-------------|-----------------------|-------|-----------------------------------------|\n| T. moroderi | 9 | 13 | 22 | 59.1% |\n| T. libanitis | 83 | 120 | 203 | 59.1% |\n| H. syriacim | 95 | 106 | 201 | 52.7% |\n| H. squamatum | 218 | 321 | 539 | 59.6% |\n| H. stoechas | 11 | 12 | 23 | 52.2% |\n",
@@ -157,6 +241,7 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
 
     ROOMS[roomID] = {
         "users" : {},
+        "chatlogs" : [],
         "questions" : allQuestions,
         "roomID": roomID
     };
@@ -164,10 +249,10 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
     res.status(200).json(ROOMS[roomID]);
 });
 
-app.listen(port, () => {
-    console.log(`Server's up, running on port ${port}`);
-    connectMongo();
-});
+// app.listen(port, () => {
+    // console.log(`Server's up, running on port ${port}`);
+    // connectMongo();
+// });
 
 app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, res) => {
     let roomID = req.params.roomID;
@@ -208,9 +293,35 @@ app.get("/game/status/:roomID", async (req, res) => {
     res.status(200).json(ROOMS[roomID]);
 });
 
-app.get("/game/chat/:chatMessage/player/:player/room/:room", async (req, res) => {
+app.get("/game/postChat/:chatMessage/player/:player/room/:roomID", async (req, res) => {
     let data = req.params;
     let msg = data.chatMessage;
+    let timestamp = new Date();
+    let roomID = data.roomID;
+    let player = data.player;
+
+    if (ROOMS[roomID] === undefined) {
+        res.status(404).json({"message": "Room not found."});
+        return;
+    }
+
+    if (ROOMS[roomID]["users"][player] === undefined ) {
+        res.status(404).json({"message": "User not found."});
+        return;
+    }
+    
+    let newMessage = {
+        "username" : player,
+        "timestamp" : timestamp,
+        "message" : msg
+    };
+
+    ROOMS[roomID]["chatlogs"].push(newMessage);
+    res.status(200).json({"message": `Entered message.`});
+});
+
+app.get("/game/getChat/:roomID", async (req, res) => {
+    res.status(200).send(ROOMS[req.params.roomID]["chatlogs"]);
 });
 
 app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
