@@ -1,22 +1,58 @@
 const MongoClient = require('mongodb').MongoClient;
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const port = 3000;
+
+app.use(cors());
 
 const ShortUniqueId = require('short-unique-id');
 
 let conn;
 let db;
 
-const https = require('https');
+const https = require('http');
 const server = https.createServer(app).listen(port);
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {
+    allowEIO3: true,
+    handlePreflightRequest: (req, res) => {
+        const headers = {
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Origin": "*", //or the specific origin you want to give access to,
+            "Access-Control-Allow-Credentials": true
+        };
+        res.writeHead(200, headers);
+        res.end();
+    },
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+        credentials: true 
+    }
+});
 
-io.socket.on("connection", (socket) => {
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
+io.on("connection", (socket) => {
     console.log("A user connected.");
     socket.on("disconnect", () => {
         console.log("A user disconnected.");
     });
+
+    // set stuff for joining
+    socket.on("join", (roomID) => {
+        socket.join(roomID);
+        console.log("Joined room " + roomID);
+    });
+});
+
+io.on("join", (roomID) => {
+    console.log("HEY")
 });
 
 const uid = new ShortUniqueId({
@@ -176,10 +212,10 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
     res.status(200).json(ROOMS[roomID]);
 });
 
-app.listen(port, () => {
-    console.log(`Server's up, running on port ${port}`);
-    connectMongo();
-});
+// app.listen(port, () => {
+    // console.log(`Server's up, running on port ${port}`);
+    // connectMongo();
+// });
 
 app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, res) => {
     let roomID = req.params.roomID;

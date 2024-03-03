@@ -1,5 +1,4 @@
 <script setup>
-import './engine.io.js';
 import './client.js';
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';
@@ -270,8 +269,6 @@ onMounted(async () => {
 const toggleSide = () => {
   sideOpen.value = !sideOpen.value;
 }
-
-const io = require("socket.io-client");
 
 </script>
 
