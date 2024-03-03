@@ -112,12 +112,7 @@ const copyCode = async () => {
     }, 2000)
 }
 
-const tracker = ref([
-    ["John", 1, true],
-    ["Ian", 0.6, false],
-    ["Berkan", 0.3, false],
-    ["Adi", 0.1, false]
-])
+const tracker = ref([])
 
 const chat = ref([
     ["John", "this is an example message"]
