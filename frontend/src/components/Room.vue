@@ -4,6 +4,11 @@ import confetti from 'canvas-confetti';
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';
 import math_plugin from '@traptitech/markdown-it-katex';
+import {useRoute} from "vue-router";
+
+const route = useRoute();
+const code = ref(route.params.id)
+client.joinRoom(code.value, route.query.username)
 
 function confettiStarryShit() {
     var defaults = {
@@ -85,7 +90,6 @@ const toggleSide = () => {
 }
 
 const checked = ref(false)
-const code = ref("ASJ8")
 const copyCode = async () => {
     await navigator.clipboard.writeText("https://satshark.johnomeara.com/" + code.value)
     checked.value = true
