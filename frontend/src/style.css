@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+}
 
 .ocean {
     overflow: hidden;
@@ -8,7 +14,9 @@
     margin: 0;
     position: relative;
 }
-.ocean::after, .ocean::before {
+
+.ocean::after,
+.ocean::before {
     background-color: white;
     width: 120%;
     height: 120px;
@@ -20,33 +28,44 @@
     animation: waves 10s ease infinite;
     opacity: 0.2;
 }
+
 .ocean::before {
     top: -60px;
     animation-delay: 5s;
     opacity: 0.1;
     left: -5%;
 }
+
 @keyframes waves {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: rotate(-2deg);
-   }
+    }
+
     50% {
         transform: rotate(2deg);
-   }
+    }
 }
+
 .bubbles {
     width: 100%;
     height: 100vh;
     animation: bubbles 10s linear infinite;
 }
+
 @keyframes bubbles {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: rotate(-5deg);
-   }
+    }
+
     50% {
         transform: rotate(5deg);
-   }
+    }
 }
+
 .bubbles span {
     width: 50px;
     height: 50px;
@@ -56,15 +75,18 @@
     bottom: -10%;
     animation: bubble 10s ease-in-out infinite;
 }
+
 @keyframes bubble {
     0% {
         bottom: -10%;
         opacity: 0;
-   }
+    }
+
     100% {
         bottom: 100%;
-   }
+    }
 }
+
 .bubbles span:nth-child(1) {
     width: 50px;
     height: 50px;
@@ -74,6 +96,7 @@
     animation-duration: 10s;
     opacity: 0.2;
 }
+
 .bubbles span:nth-child(2) {
     width: 30px;
     height: 30px;
@@ -83,6 +106,7 @@
     animation-duration: 5s;
     opacity: 0.1;
 }
+
 .bubbles span:nth-child(3) {
     width: 10px;
     height: 10px;
@@ -92,6 +116,7 @@
     animation-duration: 20s;
     opacity: 0.3;
 }
+
 .bubbles span:nth-child(4) {
     width: 35px;
     height: 35px;
@@ -101,6 +126,7 @@
     animation-duration: 8s;
     opacity: 0.2;
 }
+
 .bubbles span:nth-child(5) {
     width: 45px;
     height: 45px;
@@ -110,6 +136,7 @@
     animation-duration: 15s;
     opacity: 0.1;
 }
+
 .bubbles span:nth-child(6) {
     width: 40px;
     height: 40px;
@@ -119,6 +146,7 @@
     animation-duration: 30s;
     opacity: 0.4;
 }
+
 .bubbles span:nth-child(7) {
     width: 15px;
     height: 15px;
@@ -127,6 +155,7 @@
     animation-duration: 25s;
     opacity: 0.3;
 }
+
 .bubbles span:nth-child(8) {
     width: 20px;
     height: 20px;
@@ -134,4 +163,24 @@
     left: 50%;
     animation-duration: 10s;
     opacity: 0.2;
+}
+
+.wavy-anim {
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-name: wavy;
+}
+
+@keyframes wavy {
+    0% {
+        transform: rotate(-5deg);
+    }
+
+    50% {
+        transform: rotate(5deg);
+    }
+
+    100% {
+        transform: rotate(-5deg);
+    }
 }
