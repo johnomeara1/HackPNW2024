@@ -18,6 +18,10 @@ export default function setRoomResponseFunction(f) {
 }
 var roomData = null;
 let questionCountLimit;
+
+let onStartAdapter;
+export const onStart = (f) => { onStartAdapter = f };
+
 socket.on("connect", () => {
   console.log("Connected to server");
   socket.on("roomData", (data) => {
@@ -25,6 +29,8 @@ socket.on("connect", () => {
     globalRoomId = data["roomID"];
     roomQuestions = data["questions"];
     questionCountLimit = data["questions"].length;
+
+    console.log("GOTTEN DATA");
   });
   socket.on("newMessage", (msg) => {
     if (!roomData || msg.roomID != roomData["roomID"]) return;
@@ -36,10 +42,13 @@ socket.on("connect", () => {
   });
 
   socket.on("gameStarted", (msg) => {
-    // GAME HAS STARTED
-    alert("GAME HAS STARTED");
+    onStartAdapter()
   });
 });
+
+export function startGame() {
+  socket.emit("startGame", roomData["roomID"]);
+}
 export function sendMessage() {
   let message = document.getElementById("message-box").value;
   socket.emit("message", { message });
@@ -62,6 +71,7 @@ export function makeRoomClient(name, difficulty, testType, num) {
 }
 
 export function joinRoom(roomID, player) {
+  // roomID['joining'] = true;
   socket.emit("join", { roomID, player });
   globalUser = player;
 }

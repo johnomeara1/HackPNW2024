@@ -78,6 +78,7 @@ io.on("connection", (socket) => {
         };
         socket.emit("joined", {"roomID" : roomID, "username" : player});
         console.log(JSON.stringify({"roomID" : roomID, "username" : player}));
+        socket.emit("roomData", ROOMS[roomID]);
         //socket.emit("newMessage", {"roomID": roomID, "message": `${player} has joined the room.`});
     });
 
