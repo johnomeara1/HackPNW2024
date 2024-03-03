@@ -40,7 +40,8 @@ const io = require("socket.io")(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"],
-        credentials: true 
+        credentials: false,
+        allowedHeaders: ["ngrok-skip-browser-warning"]
     }
 });
 
@@ -56,6 +57,8 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         console.log("A user disconnected.");
     });
+
+    socket.emit("testing")
 
     // set stuff for joining
     socket.on("join", (data) => {
