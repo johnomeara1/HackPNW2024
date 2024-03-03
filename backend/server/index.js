@@ -151,6 +151,12 @@ io.on("connection", (socket) => {
         socket.emit("lboard", leaderboard);
     });
 
+    socket.on("startGame", (roomID) => {
+        console.log("Game started for room " + roomID);
+        // add 5 seconds to current time
+        io.emit("gameStarted", { time: new Date().getTime() });
+    });
+
     socket.on("makeRoom", async (data) => {
         console.log("Room made: " + JSON.stringify(data));
         let diff = data.difficulty;
@@ -341,109 +347,7 @@ app.get("/", (req, res) => {
     res.status(200).send("Hola.");
 });
 
-// Specify collection name first, then insert JSON in a stringified form to be parsed.
-// Could change this later, to make JSON transmission more standard.
-
-app.get("/insertData/:collectionName/data/:insertData", (req, res) => {
-    let data = req.params;
-    let colName = data.collectionName;
-    let insertion = data.insertData.toString();
-    console.log(insertion);
-    let parsed = JSON.parse(insertion);
-
-    db.collection(colName).insertOne(parsed, (err, res) => {
-        if(err) throw err;
-        db.close();
-    });
-    res.status(200).json({message: "Done."});
-});
-
-// Create a collection purely by name
-
-app.get("/createCollection/:collectionName", (req, res) => {
-    db.createCollection(req.params.collectionName, (err, res) => {
-        if(err) throw err;
-        db.close();
-    });
-    res.status(200).json({message: "Done."});
-});
-
-// Run a query, use JSON with surrounding brackets as the query.
-
-app.get("/getData/:collectionName/query/:query", async (req, res) => {
-    let data = req.params;
-    let collectName = data.collectionName;
-    let query = JSON.parse(data.query);
-
-    res.status(200).send(await queryMongo(query, collectName));
-});
-
-// Makes a room, prepares the questions for everyone to use, creates a room ID for people to connect to
-// via socket IO, which comes later.
-
-app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCount/", async (req, res) => {
-    
-});
-
-// app.listen(port, () => {
-//     console.log(`Server's up, running on port ${port}`);
-//     connectMongo();
-// });
 io.httpServer.on("listening", () => {
     console.log(`Server's up, running on port ${port}`);
     connectMongo();
-});
-
-app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, res) => {
-    let roomID = req.params.roomID;
-    let answer = req.params.letter;
-    let player = req.params.player;
-
-    if (ROOMS[roomID]["users"][player] === undefined ) {
-        res.status(404).json({"message": "User not found."});
-        return;
-    }
-    let questionNumber = ROOMS[roomID]["users"][player]["questionNumber"]; 
-
-    if (ROOMS[roomID] === undefined) {
-        res.status(404).json({"message": "Room not found."});
-        return;
-    }
-
-    let correctAns = false;
-    if (ROOMS[roomID]["questions"][questionNumber]["answer"] == answer) {
-        correctAns = true;
-        ROOMS[roomID]["users"][player]["points"]++;
-    } 
-
-    ROOMS[roomID]["users"][player]["questionNumber"]++;
-    
-    res.status(200).json({
-        "correct" : correctAns 
-    });
-});
-
-app.get("/game/status/:roomID", async (req, res) => {
-    let roomID = req.params.roomID;
-    if (ROOMS[roomID] === undefined) {
-        res.status(404).json({"message": "Room not found."});
-        return;
-    }
-
-    res.status(200).json(ROOMS[roomID]);
-});
-
-app.get("/game/postChat/:chatMessage/player/:player/room/:roomID", async (req, res) => {
-    
-});
-
-// Get the current game chat with a room ID
-app.get("/game/getChat/:roomID", async (req, res) => {
-    res.status(200).send(ROOMS[req.params.roomID]["chatlogs"]);
-});
-
-// Join room route
-app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
-
-    res.status(200).json({"message": "Joined room."});
 });

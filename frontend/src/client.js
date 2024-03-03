@@ -1,4 +1,4 @@
-const URL = "http://honest-solely-emu.ngrok-free.app/";
+const URL = "http://localhost:3000";
 
 import { io } from "socket.io-client";
 const socket = io(URL, {
@@ -44,6 +44,15 @@ socket.on("connect", () => {
     alert("HERE'S YOUR LEADERBOARD! " + JSON.stringify(msg));
     onUpdateLeaderboard(msg);
   });
+
+  socket.on("startGame", (msg) => {
+    alert("GAME STARTED! " + JSON.stringify(msg));
+    roomData = msg;
+    roomResponseFunction(msg);
+  });
+
+  console.log("EMIT")
+  socket.emit("startGame", { roomID: "ABCD" });
 });
 
 export function sendMessage() {
