@@ -38,6 +38,10 @@ socket.on("connect", () => {
     alert("GAME HAS STARTED");
   });
 });
+
+export function startGame() {
+  socket.emit("startGame", roomData["roomID"]);
+}
 export function sendMessage() {
   let message = document.getElementById("message-box").value;
   socket.emit("message", { message });
