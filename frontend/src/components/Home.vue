@@ -16,10 +16,12 @@ const math = ref(true);
 const easy = ref(true);
 const medium = ref(true);
 const hard = ref(true);
+const admin = ref(false);
 const questionCount = ref(20);
 
 const createRoom = () => {
     if (username.value.length > 0 && roomName.value.length > 0) {
+        admin.value = true;
         const difficulty = [];
         if(easy.value) {
             difficulty.push("easy")
@@ -50,7 +52,7 @@ const createRoom = () => {
 
 const joinRoom = () => {
     if (username.value.length > 0 && joinCode.value.length > 0) {
-        router.push('/' + joinCode.value + "?username=" + username.value)
+        router.push('/' + joinCode.value + "?username=" + encodeURIComponent(username.value) + (admin.value ? "&admin=true" : "&admin=false"))
     }
 }
 

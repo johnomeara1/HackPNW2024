@@ -10,6 +10,9 @@ const route = useRoute();
 const code = ref(route.params.id)
 client.joinRoom(code.value, route.query.username)
 
+const isAdmin = ref(route.query.admin === "true")
+const hasStarted = ref(false)
+
 function confettiStarryShit() {
     var defaults = {
         spread: 360,
@@ -67,14 +70,10 @@ const passage = ref(null)
 const passageHtml = ref(null)
 
 const sideOpen = ref(false)
-const sideDisabled = ref(false);
+const sideDisabled = ref(true);
 
 const parsePassage = (passage) => {
     if (passage !== null) {
-        if (sideDisabled.value) {
-            sideOpen.value = true;
-        }
-        sideDisabled.value = false;
         passageHtml.value = md.render(passage)
     } else {
         passageHtml.value = ""
@@ -224,6 +223,12 @@ const onUpdateLeaderboard = (leaderboardNew) => {
 
 client.onUpdateLeaderboard(onUpdateLeaderboard)
 
+client.onStart(() => {
+    hasStarted.value = true;
+    sideOpen.value = true;
+    sideDisabled.value = false;
+})
+
 const onUpdateChat = (chatNew) => {
     chat.value = chatNew
 }
@@ -236,10 +241,15 @@ const sendChatMessage = () => {
     client.sendChatMessage(chatMsg.value)
 }
 
+const startGame = () => {
+    client.startGame()
+}
+
 </script>
 
 <template>
-    <div class="absolute z-[9999] w-screen h-screen bg-white flex items-center justify-center text-xl p-8 font-semibold" v-if="!dataGot">
+    <div class="absolute z-[9999] w-screen h-screen bg-white flex items-center justify-center text-xl p-8 font-semibold"
+        v-if="!dataGot">
         Connecting...
     </div>
     <div class="absolute z-[9999] w-screen h-screen bg-gray-200 flex items-center justify-center text-xl p-8 md:hidden">
@@ -285,11 +295,23 @@ const sendChatMessage = () => {
             </div>
             <div class="flex-1 flex flex-col">
                 <div class="flex flex-row flex-1 min-h-0">
+                    <div class="flex flex-col items-center justify-center flex-1 p-8" v-if="!hasStarted && !isAdmin">
+                        <div class="text-3xl font-bold mb-4">Waiting for room leader</div>
+                        <div class="uppercase font-sm font-semibold opacity-70">Your room leader needs to click start to
+                            begin</div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center flex-1 p-8" v-if="!hasStarted && isAdmin">
+                        <div class="text-3xl font-bold mb-4">You are the room leader</div>
+                        <div class="uppercase font-sm font-semibold opacity-70">Click the button below to start the game
+                        </div>
+                        <button @click="startGame"
+                            class="bg-[#6ba6ff] text-white mt-8 rounded-md px-12 font-semibold p-1 mx-auto hover:scale-[1.05] hover:opacity-80 transition-all active:scale-[0.95] uppercase">Start game</button>
+                    </div>
                     <div class="flex flex-col items-center justify-center flex-1 p-8" v-if="soloDone">
                         <div class="text-3xl font-bold mb-4">You finished! 🎉</div>
                         <div class="uppercase font-sm font-semibold opacity-70">Awaiting other players' completion</div>
                     </div>
-                    <div class="flex flex-col p-4 flex-1 gap-6 ml-12 overflow-auto" v-if="!soloDone">
+                    <div class="flex flex-col p-4 flex-1 gap-6 ml-12 overflow-auto" v-if="!soloDone && hasStarted">
                         <div class="uppercase text-sm font-semibold opacity-70 mt-4">Question {{ (questionRaw !== null ?
                             questionRaw.questionNumber : "") }} of {{ (questionRaw !== null ? questionRaw.questionCount :
         "") }}</div>
@@ -337,8 +359,9 @@ const sendChatMessage = () => {
     message[1] }}</div>
                         </div>
                         <div>
-                            <input class="border-t-2 outline-none w-full py-2 px-4" type="text" v-on:keyup.enter="sendChatMessage" v-model="chatMsg" placeholder="Send a message" />
-                            
+                            <input class="border-t-2 outline-none w-full py-2 px-4" type="text"
+                                v-on:keyup.enter="sendChatMessage" v-model="chatMsg" placeholder="Send a message" />
+
                             <button @click="sendChatMessage"
                                 class="w-full bg-[#6ba6ff] text-white px-12 font-semibold p-1 ml-auto hover:opacity-80 transition-all active:opacity-[0.95] uppercase">Send</button>
                         </div>
@@ -370,6 +393,5 @@ const sendChatMessage = () => {
                     </div>
                 </div>
             </div>
-        </div>
     </div>
-</template>
+</div></template>

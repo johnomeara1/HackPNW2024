@@ -55,7 +55,7 @@ socket.on("connect", () => {
 });
 
 export function startGame() {
-  socket.emit("startGame", roomData["roomID"]);
+  socket.emit("startGame", globalRoomId);
 }
 export function sendMessage() {
   let message = document.getElementById("message-box").value;
