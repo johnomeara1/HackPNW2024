@@ -199,6 +199,20 @@ const questionUpdated = (questionRaw) => {
 watch(questionRaw, questionUpdated)
 questionUpdated(questionRaw.value)
 
+const onUpdateLeaderboard = () => {
+
+}
+
+const onUpdateChat = (chatNew) => {
+    chat.value = chatNew
+}
+
+const chatMsg = ref("")
+
+const sendChatMessage = () => {
+    client.sendChatMessage(chatMsg.value)
+}
+
 </script>
 
 <template>
@@ -296,7 +310,7 @@ questionUpdated(questionRaw.value)
                             }}:</span> {{
     message[1] }}</div>
                         </div>
-                        <input class="border-t-2 outline-none w-full py-2 px-4" type="text" placeholder="Type a message" />
+                        <input class="border-t-2 outline-none w-full py-2 px-4" type="text" v-on:keyup.enter="sendChatMessage" v-model="chatMsg" placeholder="Send a message" />
                     </div>
                 </div>
                 <div class="min-h-64 overflow-auto border-t-2 bg-transparent flex flex-col gap-4 relative justify-center">
