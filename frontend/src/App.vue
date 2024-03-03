@@ -1,5 +1,5 @@
 <script setup>
-import './client.js';
+import * as client from './mockClient.js';
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';
 import math_plugin from '@traptitech/markdown-it-katex';
@@ -76,6 +76,53 @@ const chat = ref([
   ["John", "this is an example message"]
 ])
 
+const answers = ref([["dasdsadsa", false], ["dsadsasda", false], ["dadsadsa", false], ["dsadsadsadsaa", false]])
+const answersHtml = ref([["", false], ["", false], ["", false], ["", false]])
+const onAnswersChanged = (answers) => {
+  answersHtml.value = answers.map((a) => [md.render(a[0],), a[1]]);
+}
+watch(answers, onAnswersChanged)
+onAnswersChanged(answers.value)
+
+const toggleA = () => {
+  answers.value[1][1] = false;
+  answers.value[2][1] = false;
+  answers.value[3][1] = false;
+  answers.value[0][1] = !answers.value[0][1]
+}
+
+const toggleB = () => {
+  answers.value[0][1] = false;
+  answers.value[2][1] = false;
+  answers.value[3][1] = false;
+  answers.value[1][1] = !answers.value[1][1]
+}
+
+const toggleC = () => {
+  answers.value[1][1] = false;
+  answers.value[0][1] = false;
+  answers.value[3][1] = false;
+  answers.value[2][1] = !answers.value[2][1]
+}
+
+const toggleD = () => {
+  answers.value[1][1] = false;
+  answers.value[2][1] = false;
+  answers.value[0][1] = false;
+  answers.value[3][1] = !answers.value[3][1]
+}
+
+const questionRaw = ref(null)
+
+const submit = () => {
+  const index = answers.value.findIndex((a) => {
+    return a[1]
+  })
+  if(index !== -1) {
+    client.validateQuestion(questionRaw, index)
+  }
+}
+
 </script>
 
 <template>
@@ -126,36 +173,36 @@ const chat = ref([
           <div class="flex flex-col p-4 flex-1 gap-6 ml-12 overflow-auto">
             <div class="uppercase text-sm font-semibold opacity-70 mt-4">Question 4 of 14</div>
             <div class="mt-2 mb-6 mr-12" v-html="questionHtml"></div>
-            <button
-              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12 active:scale-[0.98]">
+            <button @click="toggleA"
+              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[0][1] ? 'bg-gray-100/90' : 'hover:bg-gray-100/50')">
               <div
                 class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
                 A</div>
-              <div class="text-left">Answer A</div>
+              <div class="text-left" v-html="answers[0][0]"></div>
             </button>
-            <button
-              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12 active:scale-[0.98]">
+            <button @click="toggleB"
+              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[1][1] ? 'bg-gray-100/90' : 'hover:bg-gray-100/50')">
               <div
                 class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
                 B</div>
-              <div class="text-left">Answer A</div>
+              <div class="text-left" v-html="answers[1][0]"></div>
             </button>
-            <button
-              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12 active:scale-[0.98]">
+            <button @click="toggleC"
+              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[2][1] ? 'bg-gray-100/90' : 'hover:bg-gray-100/50')">
               <div
                 class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
                 C</div>
-              <div class="text-left">Answer A</div>
+              <div class="text-left" v-html="answers[2][0]"></div>
             </button>
-            <button
-              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12 active:scale-[0.98]">
+            <button @click="toggleD"
+              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[3][1] ? 'bg-gray-100/90' : 'hover:bg-gray-100/50')">
               <div
                 class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
                 D</div>
-              <div class="text-left">Answer A</div>
+              <div class="text-left" v-html="answers[3][0]"></div>
             </button>
             <div class="pr-12 w-full flex flex-row justify-center">
-              <button
+              <button @click="submit"
                 class="bg-[#6ba6ff] text-white rounded-md px-6 font-semibold p-1 mx-auto hover:scale-[1.05] hover:opacity-80 transition-all active:scale-[0.95]">Submit</button>
             </div>
           </div>

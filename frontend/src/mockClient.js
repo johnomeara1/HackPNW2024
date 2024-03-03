@@ -15,3 +15,7 @@ export const validateQuestion = (question, selectedAnswerIndex) => { // the ques
     // to make this function instant, you'd want to not use await on the fetch call. It should just ping the server but not worry about the response
     // return whether it was correct / incorrect in true / false - you dont need server response for this bc it's a simple if check.
 }
+
+export const sendChatMessage = async (chatMessage) => { 
+    // send a chat message lol ifdk
+}
