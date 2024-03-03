@@ -4,7 +4,6 @@ import { io } from "socket.io-client";
 const socket = io(URL, {
   extraHeaders: {
     "Access-Control-Allow-Origin": "*",
-    "ngrok-skip-browser-warning" : 999
     "ngrok-skip-browser-warning": "please work"
   },
   reconnect: true
