@@ -4,15 +4,21 @@ export const onUpdateChat = (f) => { updateChat = f };
 let updateLeaderboard; // args | OBJECT OF THE FOLLOWING: leaderboard: array. Every element of `leaderboard` represents a player. Each player should be an array like this: [name, ratioCorrect, finished] where name is the player name, ratioCorrect is a decimal value (correctly answered / total questions), and finished is whether the player is done or not
 export const onUpdateLeaderboard = (f) => { updateLeaderboard = f };
 
+let i = 0;
+
 // make this function instant
 export const nextQuestion = () => {
     // RETURN OBJECT OF THE FOLLOWING: math: boolean, passage: string (leave null if it is math or lacks passage), question: string, questionNumber: number, questionCount: number, answers: string array, correct: the index of the correct element within the aforementioned answers array
+    i++;
+    if(i > 4) {
+        return null; // simulate end of questions
+    }
     return {
         math: true,
         passage: null,
         question: "This is an example of $c = \\pm\\sqrt{a^2 + b^2}$ a question. Berkan and pennywise chilling in an ally looking for their next victim. The question continues and this is more of the question. And more and more.",
-        questionNumber: 4,
-        questionCount: 14,
+        questionNumber: 4 + i,
+        questionCount: 8,
         answers: ["An incorrect answer :(", "An incorrect answer :(", "A correct answer :D", "An incorrect answer :("],
         correct: 2
     }
