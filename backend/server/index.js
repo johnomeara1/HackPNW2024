@@ -72,8 +72,8 @@ io.on("connection", (socket) => {
             "points" : 0,
             "questionNumber" : 0
         };
-        
-        socket.emit("newMessage", {"roomID": roomID, "message": `${player} has joined the room.`});
+        socket.emit("joined", {"roomID" : roomID, "username" : player});
+        //socket.emit("newMessage", {"roomID": roomID, "message": `${player} has joined the room.`});
     });
 
     socket.on("message", (data) => {
