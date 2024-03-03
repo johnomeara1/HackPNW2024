@@ -184,3 +184,8 @@ body {
         transform: rotate(-5deg);
     }
 }
+
+.inline-list li {
+    display: inline-block;
+    margin-right: 1rem;
+}

@@ -1,15 +1,21 @@
 <script setup>
-import * as client from './mockClient.js';
+// import * as client from './mockClient.js';
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';
 import math_plugin from '@traptitech/markdown-it-katex';
+import { io } from "socket.io-client";
+import * as client from "./client.js";
+
+client.getRoomData((data) => {
+  alert(data);
+})
 
 const md = markdownit();
 
 md.use(math_plugin, { "blockClass": "math-block", "errorColor": " #cc0000" });
 
 const questionRaw = ref(client.nextQuestion())
-if(questionRaw.value.math) {
+if (questionRaw.value.math) {
   questionRaw.value.passage = ""
 }
 
@@ -60,7 +66,7 @@ const toggleSide = () => {
 }
 
 const checked = ref(false)
-const code = ref("ASJ8")
+const code = ref("")
 const copyCode = async () => {
   await navigator.clipboard.writeText("https://satshark.johnomeara.com/" + code.value)
   checked.value = true
@@ -120,7 +126,7 @@ const submit = () => {
   const index = answers.value.findIndex((a) => {
     return a[1]
   })
-  if(index !== -1) {
+  if (index !== -1) {
     const result = client.validateQuestion(questionRaw.value, index)
     alert(result)
   }
@@ -147,6 +153,34 @@ const submit = () => {
             d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z">
           </path>
         </svg>
+      </button>
+
+
+      <!-- make it checked or not depending on current room settings -->
+      <div class="inline">
+        <ul class="inline-list inline">
+          <li><input class="bg-gray-400 rounded-lg w-20 px-3 py-2" type="text" aria-placeholder="Player Name"
+              id="player-name" value="test" /></li>
+          <li><input class="bg-gray-400 rounded-lg w-20 px-3 py-2" type="text" aria-placeholder="Room Name"
+              id="room-name" value="test" /></li>
+          <li><input type="checkbox" id="easy-questions" checked /> Easy</li>
+          <li><input type="checkbox" id="med-questions" checked /> Med</li>
+          <li><input type="checkbox" id="hard-questions" checkecd /> Hard</li>
+          <span class="mx-2"></span>
+          <li><input type="checkbox" id="english-questions" /> English</li>
+          <li><input type="checkbox" id="math-questions" checked /> Math</li>
+          <span class="mx-2"></span>
+          <li><input class="bg-gray-400 rounded-lg w-20 px-3 py-2" type="number" aria-placeholder="# of Questions"
+              id="question-count" value="4" /></li>
+        </ul>
+      </div>
+
+      <button class="bg-[#9EB4CE] px-3 py-2 rounded-lg text-white" @click="client.makeRoom()">
+        NEW ROOM
+      </button>
+
+      <button class="bg-[#9EB4CE] px-3 py-2 rounded-lg text-white" @click="client.getLeaderBoard('VONK')">
+        GET LEADERBOARD
       </button>
     </div>
     <div class="flex-1 flex flex-row w-full min-h-[calc(100vh-59px)]">
@@ -211,9 +245,13 @@ const submit = () => {
           </div>
           <div class="w-1/3 border-l-2 bg-gray-50 min-h-0 flex flex-col">
             <div class="flex-1 p-4 flex flex-col-reverse gap-2 overflow-auto min-h-0">
-              <div class="text-left" v-for="message in chat.reverse()"><span class="font-bold">{{ message[0] }}:</span> {{ message[1] }}</div>
+              <div class="text-left" v-for="message in chat.reverse()"><span class="font-bold">{{ message[0] }}:</span>
+                {{ message[1] }}</div>
             </div>
-            <input class="border-t-2 outline-none w-full py-2 px-4" type="text" placeholder="Type a message" />
+            <div>
+              <input class="border-t-2 outline-none w-full py-2 px-4" type="text" placeholder="Type a message" id="message-box" />
+              <button class="bg-[#6ba6ff] text-white w-full py-2 px-4" value="Send" @click="client.sendMessage()">Submit</button>
+            </div>
           </div>
         </div>
         <div class="min-h-64 overflow-auto border-t-2 bg-transparent flex flex-col gap-4 relative justify-center">
