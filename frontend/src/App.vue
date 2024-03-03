@@ -1,5 +1,5 @@
 <script setup>
-import * as client from './mockClient.js';
+import * as client from './client.js';
 import confetti from 'canvas-confetti';
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';

@@ -19,25 +19,20 @@ var roomData = null;
 
 socket.on("connect", () => {
   console.log("Connected to server");
-  socket.on("chat", (msg) => {
-    console.log(msg);
-    updateChat(msg);
-  });
 
   socket.on("roomData", (data) => { 
-    console.log("HEY IT WORKS")
-    // roomData = data; console.log(roomData);
-    // joinRoom(roomData["roomID"], document.getElementById("player-name").value);
+    alert("ROOM'S DATA: " + JSON.stringify(data));
   });
 
   socket.on("newMessage", (msg) => {
-    console.log(msg)
     if (!roomData || msg.roomID != roomData["roomID"]) return;
-    console.log(msg);
+    alert("New room message recieved: " + msg);
+    updateChat(msg); 
   });
 
   socket.on("lboard", (msg) => {
     alert("HERE'S YOUR LEADERBOARD! " + JSON.stringify(msg));
+    onUpdateLeaderboard(msg);
   });
 });
 
@@ -77,6 +72,10 @@ export function makeRoom() {
   socket.emit("makeRoom", { name, difficulty, testType, num });
 }
 
+export function makeRoomClient (name, difficulty, testType, num) {
+  socket.emit("makeRoom", { name, difficulty, testType, num });
+}
+
 export function submitAnswer(roomID, player, letter) {
   return getData(`/game/submitAnswer/${roomID}/player/${player}/letter/${letter}`);
 }
@@ -89,7 +88,7 @@ export function joinRoom(roomID, player) {
   socket.emit("join", { roomID, player });
 }
 
-export function getLeaderBoard(roomID) {
+export function getLeaderBoard (roomID) {
   socket.emit("leaderboard", {roomID});
 }
 
@@ -102,6 +101,7 @@ export const onUpdateLeaderboard = (f) => { updateLeaderboard = f };
 // make this function instant
 export const nextQuestion = () => {
     // RETURN OBJECT OF THE FOLLOWING: math: boolean, passage: string (leave null if it is math or lacks passage), question: string, questionNumber: number, questionCount: number, answers: string array, correct: the index of the correct element within the aforementioned answers array
+    
     return {
         math: true,
         passage: null,
