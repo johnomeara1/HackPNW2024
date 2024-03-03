@@ -1,4 +1,4 @@
-const URL = "https://honest-solely-emu.ngrok-free.app/";
+const URL = "http://honest-solely-emu.ngrok-free.app/";
 
 import { io } from "socket.io-client";
 const socket = io.connect(URL, {
@@ -7,6 +7,8 @@ const socket = io.connect(URL, {
   },
   reconnect: true
 });
+
+console.log("MONEY CAT PISS")
 
 let roomQuestions = [];
 export let globalRoomId;
