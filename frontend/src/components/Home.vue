@@ -38,10 +38,11 @@ const createRoom = () => {
             type.push("Math")
         }
         client.makeRoomClient(roomName, difficulty, type, questionCount.value);
-        setInterval(() => {
-            console.log(client.globalRoomId)
+        const a = setInterval(() => {
             if(typeof(client.globalRoomId) !== "undefined") {
-                alert(client.globalRoomId)
+                clearInterval(a)
+                joinCode.value = client.globalRoomId
+                joinRoom()
             }
         }, 100)
     }

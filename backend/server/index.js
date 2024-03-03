@@ -163,20 +163,14 @@ io.on("connection", (socket) => {
         let name = data.name;
         let type = data.testType;
 
-        // diff and type will be JSON fields, containing MIXED, multiselect info on difficulty and types
-        let parsedDiff = JSON.parse(diff);
-        let parsedType = JSON.parse(type);
-        let parsedTypeArr = parsedType.toString().split(',');
-        let parsedDiffArr = parsedDiff.toString().split(',');
-
         // use count later
         let count = data.questionCount;
         let allQuestions = [];
 
         // Loop through parsed types
-        for (let ty of parsedTypeArr) {
+        for (let ty of type) {
             let currQuery = await queryMongo({
-                "difficulty" : { $in: parsedDiffArr }
+                "difficulty" : { $in: diff }
             }, ty);
             allQuestions = allQuestions.concat(currQuery);
         }
