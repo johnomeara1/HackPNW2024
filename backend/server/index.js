@@ -12,6 +12,7 @@ let conn;
 let db;
 const dbclient = new MongoClient("mongodb://0.0.0.0:27017");
 
+
 // Connect to mongo db
 async function connectMongo() {
     try {
@@ -45,6 +46,8 @@ const io = require("socket.io")(server, {
     }
 });
 
+var loop = null;
+
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
@@ -53,6 +56,41 @@ app.use(function(req, res, next) {
   });
 
 io.on("connection", (socket) => {
+    let leaderboardRun = (roomID) => {
+        let roomIDused = roomID;
+            console.log(roomID)
+            if (roomID == undefined) return;
+                if (ROOMS[roomID] === undefined) {
+                console.log("Room doesn't exist.")
+                return;
+            }
+            console.log(ROOMS[roomIDused]["users"])
+            let allUsers = ROOMS[roomIDused]["users"];
+            console.log(typeof(ROOMS[roomIDused]));
+            console.log("alluser: " + JSON.stringify(allUsers));
+    
+            let leaderboard = [];
+    
+            let usr_i = 0;
+    
+            let keys = Object.keys(allUsers);
+    
+            for (let usr of keys) {
+                // Let's just say that each question is worth 50 points for now.
+                let pointsPossible = ROOMS[roomIDused]["questions"].length * 50;
+    
+                let lbObj = {
+                    "name": allUsers[usr]["username"],
+                    "ratioCorrect" : allUsers[usr]["points"] / pointsPossible,
+                    "finished" : (allUsers[usr]["questionIndex"] === ROOMS[roomIDused]["questions"].length)
+                };
+                leaderboard.push(lbObj);
+            }
+            console.log("Leaderboard requested for room " + roomIDused);
+    
+            socket.emit("lboard", leaderboard);
+    }
+
     console.log("A user connected.");
     socket.on("disconnect", () => {
         console.log("A user disconnected.");
@@ -79,6 +117,7 @@ io.on("connection", (socket) => {
         socket.emit("joined", {"roomID" : roomID, "username" : player});
         console.log(JSON.stringify({"roomID" : roomID, "username" : player}));
         socket.emit("roomData", ROOMS[roomID]);
+        leaderboardRun(roomID)
         //socket.emit("newMessage", {"roomID": roomID, "message": `${player} has joined the room.`});
     });
 
@@ -108,6 +147,7 @@ io.on("connection", (socket) => {
 
         // socket.emit("roomData", ROOMS[roomID]);
         socket.emit("newMessage", { newMessage, roomID });
+        leaderboardRun(roomID)
     });
 
     socket.on("submitAnswer", (data) => {
@@ -126,6 +166,7 @@ io.on("connection", (socket) => {
         console.log("Answer submitted: " + JSON.stringify(data));
         ROOMS[roomID]["users"][user]["points"] += ( (correctOrNot) ? 50 : 0 );
         console.log("Answer submitted: " + data);
+        leaderboardRun(roomID)
     });
 
     socket.on("status", (roomID) => {
@@ -133,43 +174,13 @@ io.on("connection", (socket) => {
     });
 
     socket.on("leaderboard", (roomID) => {
-        let roomIDused = roomID.roomID;
-
-        console.log("leadebriad")
-        if (ROOMS[roomIDused] === undefined) {
-            console.log("Room doesn't exist.")
-            return;
-        }
-        console.log(ROOMS[roomIDused]["users"])
-        let allUsers = ROOMS[roomIDused]["users"];
-        console.log(typeof(ROOMS[roomIDused]));
-        console.log("alluser: " + JSON.stringify(allUsers));
-
-        let leaderboard = [];
-
-        let usr_i = 0;
-
-        let keys = Object.keys(allUsers);
-
-        for (let usr of keys) {
-            // Let's just say that each question is worth 50 points for now.
-            let pointsPossible = ROOMS[roomIDused]["questions"].length * 50;
-
-            let lbObj = {
-                "name": allUsers[usr]["username"],
-                "ratioCorrect" : allUsers[usr]["points"] / pointsPossible,
-                "finished" : (allUsers[usr]["questionIndex"] === ROOMS[roomIDused]["questions"].length)
-            };
-            leaderboard.push(lbObj);
-        }
-        console.log("Leaderboard requested for room " + roomIDused);
-
-        socket.emit("lboard", leaderboard);
+        leaderboardRun(roomID.roomID);
     });
 
     socket.on("startGame", (roomID) => {
         console.log("Game started for room " + roomID);
         // add 5 seconds to current time
+        leaderboardRun(roomID.roomID)
         io.emit("gameStarted", { time: new Date().getTime() });
     });
 
@@ -207,12 +218,14 @@ io.on("connection", (socket) => {
             "roomID": roomID
         };
 
+        leaderboardRun(roomID)
         socket.emit("roomData", ROOMS[roomID]);
     });
 
     socket.on("getRoomData", (roomID) => {
         console.log("Room data requested for room " + roomID);
         socket.emit("roomData", ROOMS[roomID]);
+        leaderboardRun(roomID)
     });
 
     socket.on("getQuestions", async (roomID, difficulty, testType) => {
@@ -239,6 +252,7 @@ io.on("connection", (socket) => {
         }
 
         // Emit ALL questions via the question list to all users in the room
+        leaderboardRun(roomID)
         io.to(roomID).emit("questionList", allQuestions);
     });
 });

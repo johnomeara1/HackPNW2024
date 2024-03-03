@@ -50,6 +50,7 @@ socket.on("connect", () => {
     // onUpdateLeaderboard(msg);
   });
 
+
   socket.on("gameStarted", (msg) => {
     onStartAdapter()
   });
@@ -141,6 +142,12 @@ export const validateQuestion = (question, selectedAnswerIndex) => { // the ques
   socket.emit("leaderboard", { roomID: globalRoomId });
   return question.correct === selectedAnswerIndex
 }
+
+
+let loop = setInterval(() => {
+  socket.emit("leaderboard", { roomID: globalRoomId })
+}, 2500);
+
 export const sendChatMessage = (chatMessage) => {
   console.log("GLOBAL USER: " + globalUser);
   let finalObj = {
