@@ -1,7 +1,11 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';
+import math_plugin from '@traptitech/markdown-it-katex';
+
 const md = markdownit();
+
+md.use(math_plugin, {"blockClass": "math-block", "errorColor" : " #cc0000"});
 
 const math = ref(false)
 const passage = ref(String.raw`---
@@ -15,7 +19,6 @@ __Advertisement :)__
 You will like those projects!
 
 ---
-
 # h1 Heading 8-)
 ## h2 Heading
 ### h3 Heading
@@ -245,6 +248,17 @@ const parsePassage = (passage) => {
 watch(passage, parsePassage)
 parsePassage(passage.value)
 
+const question = ref("This is an example of $c = \\pm\\sqrt{a^2 + b^2}$ a question. Berkan and pennywise chilling in an ally looking for their next victim. The question continues and this is more of the question. And more and more.")
+const questionHtml = ref("")
+
+const parseQuestion = (question) => {
+  questionHtml.value = md.render(question)
+}
+
+watch(question, parseQuestion)
+
+parseQuestion(question.value)
+
 const sideOpen = ref(false)
 
 onMounted(async () => {
@@ -272,7 +286,7 @@ const toggleSide = () => {
     </div>
     <div class="flex-1 flex flex-row w-full min-h-[calc(100vh-59px)]">
       <div
-        :class="'flex flex-row justify-end border-r-2 transition-all overflow-hidden ' + (sideOpen ? 'w-1/3 scale-100' : 'w-0 scale-0')">
+        :class="'flex flex-row justify-end border-r-2 transition-all bg-gray-50 overflow-hidden ' + (sideOpen ? 'w-1/3 scale-100' : 'w-0 scale-0')">
         <iframe src="https://www.desmos.com/calculator"
           :class="'w-full h-[calc(100%+48px)] -mt-[48px] ' + (math ? 'display-block' : 'hidden')"></iframe>
         <div
@@ -295,35 +309,33 @@ const toggleSide = () => {
       <div class="flex-1 flex flex-col">
         <div class="flex flex-row flex-1 min-h-0">
           <div class="flex flex-col p-4 flex-1 gap-6 ml-12 overflow-auto">
-            <div class="font-bold mb-8 mr-12">This is an example of a question. Berkan and pennywise chilling in an ally looking
-              for
-              their next victim. The question continues and this is more of the question. And more and more.</div>
+            <div class="mt-4 mb-6 mr-12" v-html="questionHtml"></div>
             <button
-              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12">
+              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12 active:scale-[0.98]">
               <div
                 class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
                 A</div>
               <div class="text-left">Answer A</div>
             </button>
             <button
-              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12">
+              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12 active:scale-[0.98]">
               <div
                 class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
-                A</div>
+                B</div>
               <div class="text-left">Answer A</div>
             </button>
             <button
-              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12">
+              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12 active:scale-[0.98]">
               <div
                 class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
-                A</div>
+                C</div>
               <div class="text-left">Answer A</div>
             </button>
             <button
-              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12">
+              class="flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all hover:bg-gray-100/50 mr-12 active:scale-[0.98]">
               <div
                 class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
-                A</div>
+                D</div>
               <div class="text-left">Answer A</div>
             </button>
             <div class="pr-12 w-full flex flex-row justify-center">
@@ -331,7 +343,7 @@ const toggleSide = () => {
               class="bg-[#6ba6ff] text-white rounded-md px-6 font-bold p-1 mx-auto hover:scale-110 transition-all active:scale-100">Submit</button>
             </div>
           </div>
-          <div class="w-1/3 border-l-2"></div>
+          <div class="w-1/3 border-l-2 bg-gray-50"></div>
         </div>
         <div class="min-h-64 overflow-auto border-t-2 bg-transparent flex flex-col gap-4 relative justify-center">
           <div class="absolute w-full h-full overflow-hidden">
