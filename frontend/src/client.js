@@ -45,7 +45,8 @@ socket.on("connect", () => {
   });
   socket.on("lboard", (msg) => {
     console.log(msg)
-    updateLeaderboard(msg.map(i => [i['name'], i['radioCorrect'], i['finished']]));
+    console.log(msg.map(i => [i['name'], i['ratioCorrect'], i['finished']]))
+    updateLeaderboard({ "leaderboard": msg.map(i => [i['name'], i['ratioCorrect'], i['finished']]) });
     // onUpdateLeaderboard(msg);
   });
 

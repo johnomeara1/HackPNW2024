@@ -74,7 +74,7 @@ io.on("connection", (socket) => {
             "username" : player,
             "id" : uid.rnd(),
             "points" : 0,
-            "questionNumber" : 0
+            "questionIndex" : 0
         };
         socket.emit("joined", {"roomID" : roomID, "username" : player});
         console.log(JSON.stringify({"roomID" : roomID, "username" : player}));
@@ -115,6 +115,8 @@ io.on("connection", (socket) => {
         let user = data.globalUser;
         let roomID = data.globalRoomId;
 
+        console.log(data)
+
         if (correctOrNot === undefined || user === undefined || roomID === undefined) {
             console.log("ERROR " + JSON.stringify(data))
             console.log(correctOrNot + " " + user + " " + roomID)
@@ -138,20 +140,25 @@ io.on("connection", (socket) => {
             console.log("Room doesn't exist.")
             return;
         }
+        console.log(ROOMS[roomIDused]["users"])
         let allUsers = ROOMS[roomIDused]["users"];
+        console.log(typeof(ROOMS[roomIDused]));
+        console.log("alluser: " + JSON.stringify(allUsers));
+
         let leaderboard = [];
 
         let usr_i = 0;
 
+        let keys = Object.keys(allUsers);
 
-        for (let usr of allUsers) {
+        for (let usr of keys) {
             // Let's just say that each question is worth 50 points for now.
             let pointsPossible = ROOMS[roomIDused]["questions"].length * 50;
 
             let lbObj = {
-                "name": usr["username"],
-                "ratioCorrect" : usr["points"] / pointsPossible,
-                "finished" : (usr["questionIndex"] === ROOMS[roomIDused]["questions"].length)
+                "name": allUsers[usr]["username"],
+                "ratioCorrect" : allUsers[usr]["points"] / pointsPossible,
+                "finished" : (allUsers[usr]["questionIndex"] === ROOMS[roomIDused]["questions"].length)
             };
             leaderboard.push(lbObj);
         }
@@ -245,20 +252,20 @@ const uid = new ShortUniqueId({
 
 let ROOMS = {
     "VONK": {
-        "users" : [
-            {
+        "users" : {
+            "Adi!" : {
                 "username" : "Adi!",
                 "id" : "alks;dfj8783274u2",
                 "points" : 50,
                 "questionIndex": 1
             },
-            {
+            "Berkan!" : {
                 "username" : "Berkan!",
                 "id" : "wompwomp",
                 "points" : 100,
                 "questionIndex": 2
             }
-        ],
+        },
         "chatlogs" : [],
         "questions" : [
             {
