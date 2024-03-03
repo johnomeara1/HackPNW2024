@@ -320,6 +320,7 @@ app.get("/game/postChat/:chatMessage/player/:player/room/:roomID", async (req, r
     res.status(200).json({"message": `Entered message.`});
 });
 
+// Get the current game chat with a room ID
 app.get("/game/getChat/:roomID", async (req, res) => {
     res.status(200).send(ROOMS[req.params.roomID]["chatlogs"]);
 });

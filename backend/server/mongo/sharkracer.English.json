@@ -1,0 +1,75 @@
+[{
+  "_id": {
+    "$oid": "65e3821a807990ca7acddcf5"
+  },
+  "passage": "Le Festin is an amazing French song sung for a famous animated film.",
+  "prompt": "Which of the following animated films uses Le Festin",
+  "A": "Ratatouille",
+  "B": "Wall-E",
+  "C": "Up",
+  "D": "Despicable Me",
+  "answer": "A",
+  "index": 1,
+  "test_type": "ELA",
+  "difficulty": "easy"
+},
+{
+  "_id": {
+    "$oid": "65e384d37e5c88c6c873ca3f"
+  },
+  "passage": "To You is an 1856 poem by Walt Whitman. In the poem, Whitman suggests that readers, whom he addresses directly, have not fully understood themselves, writing, _______",
+  "prompt": "Which quotation from “To You” most effectively illustrates the claim?",
+  "A": "“You have not known what you are, you have slumber’d upon yourself / all your life, / Your eyelids have been the same as closed most of the time.”",
+  "B": "“These immense meadows, these interminable rivers, you are immense / and interminable as they.”",
+  "C": "“I should have made my way straight to you long ago, / I should have blabb’d nothing but you, I should have chanted nothing / but you.”",
+  "D": "“I will leave all and come and make the hymns of you, / None has understood you, but I understand you.”",
+  "answer": "A",
+  "test_type": "ELA",
+  "index": 2,
+  "difficulty": "medium"
+},
+{
+  "_id": {
+    "$oid": "65e387df7e5c88c6c873ca41"
+  },
+  "passage": "Born in 1891 to a Quechua-speaking family in the Andes Mountains of Peru, Martín Chambi is today considered to be one of the most renowned figures of Latin American photography. In a paper for an art history class, a student claims that Chambi’s photographs have considerable ethnographic value—in his work, Chambi was able to capture diverse elements of Peruvian society, representing his subjects with both dignity and authenticity.",
+  "prompt": "Which finding, if true, would most directly support the student’s claim?",
+  "A": "Chambi took many commissioned portraits of wealthy Peruvians, but he also produced hundreds of images carefully documenting the peoples, sites, and customs of Indigenous communities of the Andes.",
+  "B": "Chambi’s photographs demonstrate a high level of technical skill, as seen in his strategic use of illumination to create dramatic light and shadow contrasts.",
+  "C": "During his lifetime, Chambi was known and celebrated both within and outside his native Peru, as his work was published in places like Argentina, Spain, and Mexico.",
+  "D": "Some of the peoples and places Chambi photographed had long been popular subjects for Peruvian photographers.",
+  "answer": "A",
+  "test_type": "ELA",
+  "index": 3,
+  "difficulty": "medium"
+},
+{
+  "_id": {
+    "$oid": "65e38c187e5c88c6c873ca43"
+  },
+  "passage": "| Individual           | Years active | Number of films known and commonly credited |\\n\n|----------------------|--------------|---------------------------------------------|\\n\n| James Young Deer     | 1909–1924    | 33 (actor), 35 (director), 10 (writer)     |\\n\n| Dark Cloud           | 1910–1920    | 35 (actor), 1 (writer)                      |\\n\n| Edwin Carewe         | 1912–1934    | 47 (actor), 58 (director), 20 (producer), 4 (writer) |\\n\n| Lillian St. Cyr (Red Wing) | 1908–1921 | 66 (actor)                                  |\\n",
+  "prompt": "Some researchers studying Indigenous actors and filmmakers in the United States have turned their attention to the early days of cinema, particularly the 1910s and 1920s, when people like James Young Deer, Dark Cloud, Edwin Carewe, and Lillian St. Cyr (known professionally as Red Wing) were involved in one way or another with numerous films. In fact, so many films and associated records for this era have been lost that counts of those four figures’ output should be taken as bare minimums rather than totals; it’s entirely possible, for example, that _______ Which choice most effectively uses data from the table to complete the example?",
+  "A": "Dark Cloud acted in significantly fewer films than did Lillian St. Cyr, who is credited with 66 performances.",
+  "B": "Edwin Carewe’s 47 credited acting roles includes only films made after 1934",
+  "C": "Lillian St. Cyr acted in far more than 66 films and Edwin Carewe directed more than 58.",
+  "D": "James Young Deer actually directed 33 films and acted in only 10",
+  "answer": "C",
+  "test_type": "ELA",
+  "index": 4,
+  "difficulty": "hard"
+},
+{
+  "_id": {
+    "$oid": "65e38ec37e5c88c6c873ca45"
+  },
+  "passage": "| Species | Bare ground | Patches of vegetation | Total | Percent found in patches of vegetation |\n|--------------|-------------|-----------------------|-------|-----------------------------------------|\n| T. moroderi | 9 | 13 | 22 | 59.1% |\n| T. libanitis | 83 | 120 | 203 | 59.1% |\n| H. syriacim | 95 | 106 | 201 | 52.7% |\n| H. squamatum | 218 | 321 | 539 | 59.6% |\n| H. stoechas | 11 | 12 | 23 | 52.2% |\n",
+  "prompt": "Alicia Montesinos-Navarro, Isabelle Storer, and Rocío Perez-Barrales recently examined several plots within a diverse plant community in southeast Spain. The researchers calculated that if individual plants were randomly distributed on this particular landscape, only about 15% would be with other plants in patches of vegetation. They counted the number of juvenile plants of five species growing in patches of vegetation and the number growing alone on bare ground and compared those numbers to what would be expected if the plants were randomly distributed. Based on these results, they claim that plants of these species that grow in close proximity to other plants gain an advantage at an early developmental stage. Which choice best describes data from the table that support the researchers’ claim?",
+  "A": "For all five species, less than 75% of juvenile plants were growing in patches of vegetation.",
+  "B": "The species with the greatest number of juvenile plants growing in patches of vegetation was H. stoechas.",
+  "C": "For T. libanitis and T. moroderi, the percentage of juvenile plants growing in patches of vegetation was less than what would be expected if plants were randomly distributed.",
+  "D": "For each species, the percentage of juvenile plants growing in patches of vegetation was substantially higher than what would be expected if plants were randomly distributed.",
+  "answer": "D",
+  "test_type": "ELA",
+  "index": 5,
+  "difficulty": "hard"
+}]
