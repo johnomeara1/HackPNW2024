@@ -1,3 +1,137 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ocean {
+    overflow: hidden;
+    background-image: linear-gradient(0deg, #022244, #58c8da);
+    margin: 0;
+    position: relative;
+}
+.ocean::after, .ocean::before {
+    background-color: white;
+    width: 120%;
+    height: 120px;
+    position: absolute;
+    content: '';
+    top: -80px;
+    left: -10%;
+    border-radius: 100%;
+    animation: waves 10s ease infinite;
+    opacity: 0.2;
+}
+.ocean::before {
+    top: -60px;
+    animation-delay: 5s;
+    opacity: 0.1;
+    left: -5%;
+}
+@keyframes waves {
+    0%, 100% {
+        transform: rotate(-2deg);
+   }
+    50% {
+        transform: rotate(2deg);
+   }
+}
+.bubbles {
+    width: 100%;
+    height: 100vh;
+    animation: bubbles 10s linear infinite;
+}
+@keyframes bubbles {
+    0%, 100% {
+        transform: rotate(-5deg);
+   }
+    50% {
+        transform: rotate(5deg);
+   }
+}
+.bubbles span {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    position: absolute;
+    background-color: white;
+    bottom: -10%;
+    animation: bubble 10s ease-in-out infinite;
+}
+@keyframes bubble {
+    0% {
+        bottom: -10%;
+        opacity: 0;
+   }
+    100% {
+        bottom: 100%;
+   }
+}
+.bubbles span:nth-child(1) {
+    width: 50px;
+    height: 50px;
+    opacity: 0.5;
+    left: 10%;
+    animation-delay: 3s;
+    animation-duration: 10s;
+    opacity: 0.2;
+}
+.bubbles span:nth-child(2) {
+    width: 30px;
+    height: 30px;
+    opacity: 0.5;
+    left: 40%;
+    animation-delay: 1s;
+    animation-duration: 5s;
+    opacity: 0.1;
+}
+.bubbles span:nth-child(3) {
+    width: 10px;
+    height: 10px;
+    opacity: 0.5;
+    left: 30%;
+    animation-delay: 5s;
+    animation-duration: 20s;
+    opacity: 0.3;
+}
+.bubbles span:nth-child(4) {
+    width: 35px;
+    height: 35px;
+    opacity: 0.5;
+    left: 40%;
+    animation-delay: 8s;
+    animation-duration: 8s;
+    opacity: 0.2;
+}
+.bubbles span:nth-child(5) {
+    width: 45px;
+    height: 45px;
+    opacity: 0.5;
+    left: 60%;
+    animation-delay: 10s;
+    animation-duration: 15s;
+    opacity: 0.1;
+}
+.bubbles span:nth-child(6) {
+    width: 40px;
+    height: 40px;
+    opacity: 0.5;
+    left: 80%;
+    animation-delay: 3s;
+    animation-duration: 30s;
+    opacity: 0.4;
+}
+.bubbles span:nth-child(7) {
+    width: 15px;
+    height: 15px;
+    opacity: 0.5;
+    left: 90%;
+    animation-duration: 25s;
+    opacity: 0.3;
+}
+.bubbles span:nth-child(8) {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+    left: 50%;
+    animation-duration: 10s;
+    opacity: 0.2;
+}
