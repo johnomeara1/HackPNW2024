@@ -37,8 +37,12 @@ const createRoom = () => {
         if(math.value) {
             type.push("Math")
         }
-        const resp = client.makeRoomClient(roomName, difficulty, type, questionCount.value);
-        alert(JSON.stringify(resp))
+        client.makeRoomClient(roomName, difficulty, type, questionCount.value);
+        setTimeout(() => {
+            if(typeof(client.globalRoomId) !== "undefined") {
+                alert(client.globalRoomId)
+            }
+        }, 100)
     }
 }
 
