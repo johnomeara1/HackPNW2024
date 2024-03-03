@@ -1,55 +1,28 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-<a name="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
-<!-- PROJECT LOGO -->
-<br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/johnomeara1/HackPNW2024">
+    <img src="https://raw.githubusercontent.com/johnomeara1/HackPNW2024/master/frontend/public/Designer.jpeg" alt="Logo" width="320" height="320">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center"><img src="https://raw.githubusercontent.com/johnomeara1/HackPNW2024/master/frontend/public/logo.png" width="220" /></h3>
 
   <p align="center">
-    project_description
+    SATShark is an innovative multiplayer educational game designed to enhance SAT preparation while engaging in competitive gameplay. 
+   <br>
+    <strong>By:</strong> John O'Meara, Aditya Bankoti, Berkan Mertan, Ian Kim
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/johnomeara1/HackPNW2024"><strong>Explore the repo »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://youtu.be/mAVRRUz1FxE">View Video</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
+    <a href="https://github.com/johnomeara1/HackPNW2024/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/johnomeara1/HackPNW2024/issues">Request Feature</a>
   </p>
 </div>
 
+
+---
 
 
 <!-- TABLE OF CONTENTS -->
@@ -114,10 +87,10 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+There are sevearl
 * npm
   ```sh
-  npm install npm@latest -g
+  npm i
   ```
 
 ### Installation
