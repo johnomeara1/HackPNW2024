@@ -219,7 +219,7 @@ watch(questionRaw, questionUpdated)
 questionUpdated(questionRaw.value)
 
 const onUpdateLeaderboard = (leaderboardNew) => {
-    tracker.value = leaderboardNew;
+    tracker.value = leaderboardNew["leaderboard"];
 }
 
 client.onUpdateLeaderboard(onUpdateLeaderboard)
