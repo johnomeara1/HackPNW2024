@@ -243,10 +243,6 @@ const startGame = () => {
 </script>
 
 <template>
-    <div class="absolute z-[9999] w-screen h-screen bg-white flex items-center justify-center text-xl p-8 font-semibold"
-        v-if="!dataGot">
-        Connecting...
-    </div>
     <div class="absolute z-[9999] w-screen h-screen bg-gray-200 flex items-center justify-center text-xl p-8 md:hidden">
         Sorry! SATShark currently only supports suitable desktop viewports. Try resizing the window to be larger.
     </div>

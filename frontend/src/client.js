@@ -144,9 +144,9 @@ export const validateQuestion = (question, selectedAnswerIndex) => { // the ques
 }
 
 
-let loop = setInterval(() => {
-  socket.emit("leaderboard", { roomID: globalRoomId })
-}, 2500);
+// let loop = setInterval(async () => {
+//   socket.emit("leaderboard", { roomID: globalRoomId })
+// }, 3600);
 
 export const sendChatMessage = (chatMessage) => {
   console.log("GLOBAL USER: " + globalUser);
