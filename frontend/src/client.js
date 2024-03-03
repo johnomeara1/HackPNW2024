@@ -22,6 +22,10 @@ let questionCountLimit;
 let onStartAdapter;
 export const onStart = (f) => { onStartAdapter = f };
 
+let onGotDataAdapter;
+export const onGotData = (f) => { onGotDataAdapter = f };
+
+
 socket.on("connect", () => {
   console.log("Connected to server");
   socket.on("roomData", (data) => {
@@ -29,6 +33,7 @@ socket.on("connect", () => {
     globalRoomId = data["roomID"];
     roomQuestions = data["questions"];
     questionCountLimit = data["questions"].length;
+    onGotDataAdapter()
 
     console.log("GOTTEN DATA");
   });

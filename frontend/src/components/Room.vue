@@ -4,7 +4,7 @@ import confetti from 'canvas-confetti';
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';
 import math_plugin from '@traptitech/markdown-it-katex';
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 const code = ref(route.params.id)
@@ -45,7 +45,19 @@ const md = markdownit();
 
 md.use(math_plugin, { "blockClass": "math-block", "errorColor": " #cc0000" });
 
-const questionRaw = ref(client.nextQuestion())
+const questionRaw = ref({
+    math: true,
+    passage: null,
+    question: "This is an example of $c = \\pm\\sqrt{a^2 + b^2}$ a question. Berkan and pennywise chilling in an ally looking for their next victim. The question continues and this is more of the question. And more and more.",
+    questionNumber: 4,
+    questionCount: 14,
+    answers: ["An incorrect answer :(", "An incorrect answer :(", "A correct answer :D", "An incorrect answer :("],
+    correct: 2
+})
+
+client.onGotData(() => {
+    questionRaw.value = client.nextQuestion();
+})
 
 const math = ref(null)
 const passage = ref(null)
@@ -79,7 +91,7 @@ const parseQuestion = (question) => {
 
 watch(question, parseQuestion)
 
-onMounted(async () => {
+onMounted(() => {
     if (!sideDisabled.value) {
         sideOpen.value = true;
     }
@@ -176,7 +188,7 @@ const submit = () => {
 }
 
 const continueIncorrect = () => {
-    questionRaw.value = client.nextQuestion()
+    questionRaw.value = (client.nextQuestion())
 }
 
 const soloDone = ref(false);

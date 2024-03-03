@@ -83,12 +83,11 @@ io.on("connection", (socket) => {
     });
 
     socket.on("message", (data) => {
-        console.log(data)
         let roomID = data.roomID;
         let msg = data.message;
         let player = data.player;
         //let date = new Date();
-
+        
         // console.log("Chat message received: " + msg + " from " + player + " in room " + roomID + " at " + date);
         if (ROOMS[roomID] === undefined) {
             return;
@@ -98,15 +97,16 @@ io.on("connection", (socket) => {
             return;
         }
 
+            console.log("YOU HAVE A NEW MESSGEA!" + data)
         let newMessage = {
             "username" : player,
-            "timestamp" : timestamp,
+            "timestamp" : new Date().toUTCString(),
             "message" : msg
         };
 
         ROOMS[roomID]["chatlogs"].push(newMessage);
 
-        socket.emit("roomData", ROOMS[roomID]);
+        // socket.emit("roomData", ROOMS[roomID]);
         socket.emit("newMessage", { newMessage, roomID });
     });
 
@@ -114,6 +114,12 @@ io.on("connection", (socket) => {
         let correctOrNot = data.state;
         let user = data.globalUser;
         let roomID = data.globalRoomId;
+
+        if (correctOrNot === undefined || user === undefined || roomID === undefined) {
+            console.log("ERROR " + JSON.stringify(data))
+            console.log(correctOrNot + " " + user + " " + roomID)
+            return;
+        }
 
         console.log("Answer submitted: " + JSON.stringify(data));
         ROOMS[roomID]["users"][user]["points"] += ( (correctOrNot) ? 50 : 0 );
