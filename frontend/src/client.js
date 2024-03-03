@@ -52,25 +52,6 @@ export function updateRoomData() {
 export function getRoomData() {
   return roomData;
 }
-export function makeRoom() {
-  let name = document.getElementById("room-name").value;
-  let easy = document.getElementById("easy-questions").checked;
-  let medium = document.getElementById("med-questions").checked;
-  let hard = document.getElementById("hard-questions").checked;
-  let english = document.getElementById("english-questions").checked;
-  let math = document.getElementById("math-questions").checked;
-  let num = document.getElementById("question-count").value;
-  let difficulty = JSON.stringify([
-    easy ? "easy" : "",
-    medium ? "medium" : "",
-    hard ? "hard" : ""
-  ].filter((x) => x !== ""));
-  let testType = JSON.stringify([
-    english ? "english" : "",
-    math ? "math" : ""
-  ].filter((x) => x !== ""));
-  socket.emit("makeRoom", { name, difficulty, testType, num });
-}
 
 export function makeRoomClient(name, difficulty, testType, num) {
   let roomIdReturnCode;
