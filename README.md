@@ -136,9 +136,6 @@ Don't forget to give the project a star! Thanks again!
 
 TBD
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 <!-- ## Contact
