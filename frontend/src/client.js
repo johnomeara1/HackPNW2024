@@ -1,4 +1,4 @@
-const URL = "https://honest-solely-emu.ngrok-free.app/";
+const URL = "https://localhost:3000";
 
 async function getData(ext) {
   let response = await fetch(URL + ext);
@@ -20,3 +20,9 @@ async function getStatus(roomID) {
 async function joinRoom(roomID, player) {
   return await getData(`/game/joinRoom/${roomID}/player/${player}`);
 }
+
+async function getLeaderBoard(roomID) {
+  let users = await getStatus();
+}
+
+const socket = eio(URL);
