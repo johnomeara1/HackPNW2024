@@ -28,6 +28,8 @@ socket.on("connect", () => {
     globalRoomId = data["roomID"];
     roomQuestions = data["questions"];
     questionCountLimit = data["questions"].length;
+
+    console.log("GOTTEN DATA");
   });
   socket.on("newMessage", (msg) => {
     if (!roomData || msg.roomID != roomData["roomID"]) return;
@@ -75,6 +77,7 @@ export function getStatus(roomID) {
 }
 
 export function joinRoom(roomID, player) {
+  // roomID['joining'] = true;
   socket.emit("join", { roomID, player });
 }
 
