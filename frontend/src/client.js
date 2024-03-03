@@ -69,6 +69,7 @@ export function makeRoom() {
   ].filter((x) => x !== ""));
   socket.emit("makeRoom", { name, difficulty, testType, num });
 }
+
 export function makeRoomClient(name, difficulty, testType, num) {
   let roomIdReturnCode;
   console.log("Calling make room...");
@@ -78,18 +79,23 @@ export function makeRoomClient(name, difficulty, testType, num) {
   });
   return roomIdReturnCode;
 }
+
 export function submitAnswer(roomID, player, letter) {
   return getData(`/game/submitAnswer/${roomID}/player/${player}/letter/${letter}`);
 }
+
 export function getStatus(roomID) {
   return getData(`/game/status/${roomID}`);
 }
+
 export function joinRoom(roomID, player) {
   socket.emit("join", { roomID, player });
 }
+
 export function getLeaderBoard(roomID) {
   socket.emit("leaderboard", { roomID });
 }
+
 let updateChat; // args | OBJECT OF THE FOLLOWING: chat: array. Every element of `chat` represents a message. Each message should be an array like this: [name, text] where name is the sender name and text is the message content itself.
 export const onUpdateChat = (f) => { updateChat = f };
 let updateLeaderboard; // args | OBJECT OF THE FOLLOWING: leaderboard: array. Every element of `leaderboard` represents a player. Each player should be an array like this: [name, ratioCorrect, finished] where name is the player name, ratioCorrect is a decimal value (correctly answered / total questions), and finished is whether the player is done or not
@@ -100,8 +106,25 @@ export const nextQuestion = () => {
   if (currentQuestionIndex > questionCountLimit) {
     return null;
   }
+  let cq = roomQuestions[currentQuestionIndex++];
+  let correctIdxMap = {
+    "A": 1,
+    "B": 2,
+    "C": 3,
+    "D": 4
+  };
+  let formattedObj = {
+    math: cq["test_type"] === "Math",
+    passage: cq["passage"],
+    question: cq["prompt"],
+    questionNumber: currentQuestionIndex,
+    questionCount: questionCountLimit,
+    answers: [cq["A"], cq["B"], cq["C"], cq["D"]],
+    correct: correctIdxMap[cq["answer"]]-1
+  };
   // RETURN OBJECT OF THE FOLLOWING: math: boolean, passage: string (leave null if it is math or lacks passage), question: string, questionNumber: number, questionCount: number, answers: string array, correct: the index of the correct element within the aforementioned answers array
-  return roomQuestions[currentQuestionIndex++];
+  return formattedObj;
+
   // return {
   //     math: true,
   //     passage: null,
@@ -120,6 +143,6 @@ export const validateQuestion = (question, selectedAnswerIndex) => { // the ques
   socket.emit("submitAnswer", {})
   return question.correct === selectedAnswerIndex
 }
-export const sendChatMessage = async (chatMessage) => {
-  // send a chat message lol ifdk
+export const sendChatMessage = (chatMessage) => {
+  socket.emit("message", {})
 }
