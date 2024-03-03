@@ -37,8 +37,6 @@ socket.on("connect", () => {
     // GAME HAS STARTED
     alert("GAME HAS STARTED");
   });
-
-  socket.emit("startGame", { roomID: "ABCD" });
 });
 export function sendMessage() {
   let message = document.getElementById("message-box").value;
