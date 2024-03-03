@@ -3,7 +3,7 @@ const URL = "https://honest-solely-emu.ngrok-free.app/";
 import { io } from "socket.io-client";
 const socket = io.connect(URL, {
   extraHeaders: {
-    "Access-Control-Allow-Origin": "*"
+    "ngrok-skip-browser-warning": "please work"
   },
   reconnect: true
 });
