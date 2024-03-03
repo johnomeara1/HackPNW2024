@@ -17,6 +17,10 @@ export default function setRoomResponseFunction(f) {
 }
 var roomData = null;
 let questionCountLimit;
+
+let onStartAdapter;
+export const onStart = (f) => { onStartAdapter = f };
+
 socket.on("connect", () => {
   console.log("Connected to server");
   socket.on("roomData", (data) => {
@@ -36,8 +40,7 @@ socket.on("connect", () => {
   });
 
   socket.on("gameStarted", (msg) => {
-    // GAME HAS STARTED
-    alert("GAME HAS STARTED");
+    onStartAdapter()
   });
 });
 
