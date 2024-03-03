@@ -19,7 +19,6 @@ let questionCountLimit;
 socket.on("connect", () => {
   console.log("Connected to server");
   socket.on("roomData", (data) => {
-    alert("ROOM'S DATA: " + JSON.stringify(data));
     // in case other one doesn't work
     globalRoomId = data["roomID"];
     roomQuestions = data["questions"];
@@ -27,11 +26,9 @@ socket.on("connect", () => {
   });
   socket.on("newMessage", (msg) => {
     if (!roomData || msg.roomID != roomData["roomID"]) return;
-    alert("New room message recieved: " + msg);
     updateChat(msg);
   });
   socket.on("lboard", (msg) => {
-    alert("HERE'S YOUR LEADERBOARD! " + JSON.stringify(msg));
     onUpdateLeaderboard(msg);
   });
 });
@@ -93,7 +90,6 @@ export const onUpdateLeaderboard = (f) => { updateLeaderboard = f };
 let currentQuestionIndex = 0;
 export const nextQuestion = () => {
   if (currentQuestionIndex > questionCountLimit) {
-    alert("Competition is over!");
     return null;
   }
   let cq = roomQuestions[currentQuestionIndex++];
