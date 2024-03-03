@@ -10,6 +10,19 @@ const ShortUniqueId = require('short-unique-id');
 
 let conn;
 let db;
+const dbclient = new MongoClient("mongodb://0.0.0.0:27017");
+
+// Connect to mongo db
+async function connectMongo() {
+    try {
+        conn = await dbclient.connect();
+    } catch(e) {
+        console.error(e);
+    }
+
+    db = conn.db("sharkracer");
+    console.log("Connected to DB")
+}
 
 const https = require('http');
 const server = https.createServer(app).listen(port);
@@ -45,16 +58,54 @@ io.on("connection", (socket) => {
     });
 
     // set stuff for joining
-    socket.on("join", (roomID) => {
-        socket.join(roomID);
-        console.log("Joined room " + roomID);
+    socket.on("join", (data) => {
+        let roomID = data.roomID;
+        let player = data.player;
+
+        if (ROOMS[roomID] === undefined) {
+            return;
+        }
+
+        ROOMS[roomID]["users"][player] = {
+            "username" : player,
+            "id" : uid.rnd(),
+            "points" : 0,
+            "questionNumber" : 0
+        };
+        
+        socket.emit("newMessage", {"roomID": roomID, "message": `${player} has joined the room.`});
     });
 
-    socket.on("chat", (msg) => {
-        console.log("Chat message: " + msg);
+    socket.on("message", (data) => {
+        console.log(data)
+        let roomID = data.roomID;
+        let msg = data.message;
+        let player = data.player;
+        let date = data.date;
+
+        // console.log("Chat message received: " + msg + " from " + player + " in room " + roomID + " at " + date);
+        if (ROOMS[roomID] === undefined) {
+            return;
+        }
+
+        if (ROOMS[roomID]["users"][player] === undefined ) {
+            return;
+        }
+
+        let newMessage = {
+            "username" : player,
+            "timestamp" : timestamp,
+            "message" : msg
+        };
+
+        ROOMS[roomID]["chatlogs"].push(newMessage);
+
+        socket.emit("roomData", ROOMS[roomID]);
+        socket.emit("newMessage", { newMessage, roomID });
     });
 
     socket.on("submitAnswer", (data) => {
+        
         console.log("Answer submitted: " + data);
     });
 
@@ -62,25 +113,110 @@ io.on("connection", (socket) => {
         console.log("Status requested for room " + roomID);
     });
 
-    socket.on("joinRoom", (roomID) => {
-        console.log("Joining room " + roomID);
-    });
+    // socket.on("joinRoom", (roomID, username) => {
+    //     console.log("Joining room " + roomID);
+    //     socket.emit("joinedRoom", `New user, ${username} has joined the room.`)
+    // });
 
     socket.on("leaderboard", (roomID) => {
-        console.log("Leaderboard requested for room " + roomID);
+        let roomIDused = roomID.roomID;
+
+        if (ROOMS[roomIDused] === undefined) {
+            console.log("Room doesn't exist.")
+            return;
+        }
+        let allUsers = ROOMS[roomIDused]["users"];
+        let leaderboard = {
+
+        };
+
+        for (let usr of allUsers) {
+            let lbObj = {
+                "name": usr["username"],
+                "ratioCorrect" : 0,
+                "finished" : (usr["questionIndex"] === ROOMS[roomIDused]["questions"].length)
+            }
+        }
+        console.log("Leaderboard requested for room " + roomIDused);
+
+        socket.emit("lboard", leaderboard);
     });
 
-    socket.on("makeRoom", (data) => {
-        console.log9("Room made: " + data);
+    socket.on("makeRoom", async (data) => {
+        console.log("Room made: " + JSON.stringify(data));
+        let diff = data.difficulty;
+        let name = data.name;
+        let type = data.testType;
+
+        // diff and type will be JSON fields, containing MIXED, multiselect info on difficulty and types
+        let parsedDiff = JSON.parse(diff);
+        let parsedType = JSON.parse(type);
+        let parsedTypeArr = parsedType.toString().split(',');
+        let parsedDiffArr = parsedDiff.toString().split(',');
+
+        // use count later
+        let count = data.questionCount;
+        let allQuestions = [];
+
+        // Loop through parsed types
+        for (let ty of parsedTypeArr) {
+            let currQuery = await queryMongo({
+                "difficulty" : { $in: parsedDiffArr }
+            }, ty);
+            allQuestions = allQuestions.concat(currQuery);
+        }
+
+        let roomID = "";
+
+        while (true) {
+            roomID = uid.rnd();
+            if (ROOMS[roomID] === undefined && roomID != "") {
+                break;
+            }
+        }
+
+        ROOMS[roomID] = {
+            "users" : {},
+            "chatlogs" : [],
+            "questions" : allQuestions,
+            "roomID": roomID
+        };
+
+        socket.emit("roomData", ROOMS[roomID]);
+        console.log("ROOM CODE: " + roomID);
     });
 
-    socket.on("getQuestion", (roomID) => {
-        console.log("Question requested for room " + roomID);
+    socket.on("getRoomData", (roomID) => {
+        console.log("Room data requested for room " + roomID);
+        socket.emit("roomData", ROOMS[roomID]);
     });
-});
 
-io.on("join", (roomID) => {
-    console.log("HEY")
+    socket.on("getQuestions", async (roomID, difficulty, testType) => {
+        console.log("Questions requested for room " + roomID);
+        let diff = difficulty;
+        let type = testType;
+    
+        // diff and type will be JSON fields, containing MIXED, multiselect info on difficulty and types
+        let parsedDiff = JSON.parse(diff);
+        let parsedType = JSON.parse(type);
+        let parsedTypeArr = parsedType.toString().split(',');
+        let parsedDiffArr = parsedDiff.toString().split(',');
+    
+        // use count later
+        let count = reqdata.questionCount;
+        let allQuestions = [];
+    
+        // Loop through parsed types
+        for (let ty of parsedTypeArr) {
+            let currQuery = await queryMongo({
+                "difficulty" : { $in: parsedDiffArr }
+            }, ty);
+            allQuestions = allQuestions.concat(currQuery);
+        }
+
+        // Emit ALL questions via the question list to all users in the room
+        io.to(roomID).emit("questionList", allQuestions);
+    });
 });
 
 const uid = new ShortUniqueId({
@@ -88,12 +224,15 @@ const uid = new ShortUniqueId({
     length: 4
 });
 
-const dbclient = new MongoClient("mongodb://localhost:27017/");
-
 // or using default dictionaries available since v4.3+
 
 let ROOMS = {
-
+    "VONK": {
+        "users" : [],
+        "chatlogs" : [],
+        "questions" : [],
+        "roomID": "VONK"
+    }
 };
 
 /*
@@ -139,19 +278,13 @@ function randint(min, max) {
     return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 
-// Connect to mongo db
-async function connectMongo() {
-    try {
-        conn = await dbclient.connect();
-    } catch(e) {
-        console.error(e);
-    }
-
-    db = conn.db("sharkracer");
-}
-
 // Mongo querying function
 async function queryMongo (query, collectionName) {
+    if (db === undefined) {
+        console.log("DB not connected.");
+        return;
+    }
+
     const dbresult = await db.collection(collectionName).find(query);
     let results = [];
 
@@ -207,52 +340,17 @@ app.get("/getData/:collectionName/query/:query", async (req, res) => {
 // via socket IO, which comes later.
 
 app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCount/", async (req, res) => {
-    let reqdata = req.params;
-    let diff = reqdata.diff;
-    let name = reqdata.name;
-    let type = reqdata.testType;
-
-    // diff and type will be JSON fields, containing MIXED, multiselect info on difficulty and types
-    let parsedDiff = JSON.parse(diff);
-    let parsedType = JSON.parse(type);
-    let parsedTypeArr = parsedType.toString().split(',');
-    let parsedDiffArr = parsedDiff.toString().split(',');
-
-    // use count later
-    let count = reqdata.questionCount;
-    let allQuestions = [];
-
-    // Loop through parsed types
-    for (let ty of parsedTypeArr) {
-        let currQuery = await queryMongo({
-            "difficulty" : { $in: parsedDiffArr }
-        }, ty);
-        allQuestions = allQuestions.concat(currQuery);
-    }
-
-    let roomID = "";
-
-    while (true) {
-        roomID = uid.rnd();
-        if (ROOMS[roomID] === undefined && roomID != "") {
-            break;
-        }
-    }
-
-    ROOMS[roomID] = {
-        "users" : {},
-        "chatlogs" : [],
-        "questions" : allQuestions,
-        "roomID": roomID
-    };
-
-    res.status(200).json(ROOMS[roomID]);
+    
 });
 
 // app.listen(port, () => {
-    // console.log(`Server's up, running on port ${port}`);
-    // connectMongo();
+//     console.log(`Server's up, running on port ${port}`);
+//     connectMongo();
 // });
+io.httpServer.on("listening", () => {
+    console.log(`Server's up, running on port ${port}`);
+    connectMongo();
+});
 
 app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, res) => {
     let roomID = req.params.roomID;
@@ -294,30 +392,7 @@ app.get("/game/status/:roomID", async (req, res) => {
 });
 
 app.get("/game/postChat/:chatMessage/player/:player/room/:roomID", async (req, res) => {
-    let data = req.params;
-    let msg = data.chatMessage;
-    let timestamp = new Date();
-    let roomID = data.roomID;
-    let player = data.player;
-
-    if (ROOMS[roomID] === undefined) {
-        res.status(404).json({"message": "Room not found."});
-        return;
-    }
-
-    if (ROOMS[roomID]["users"][player] === undefined ) {
-        res.status(404).json({"message": "User not found."});
-        return;
-    }
     
-    let newMessage = {
-        "username" : player,
-        "timestamp" : timestamp,
-        "message" : msg
-    };
-
-    ROOMS[roomID]["chatlogs"].push(newMessage);
-    res.status(200).json({"message": `Entered message.`});
 });
 
 // Get the current game chat with a room ID
@@ -325,20 +400,8 @@ app.get("/game/getChat/:roomID", async (req, res) => {
     res.status(200).send(ROOMS[req.params.roomID]["chatlogs"]);
 });
 
+// Join room route
 app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
-    let roomID = req.params.roomID;
-    let player = req.params.player;
-    if (ROOMS[roomID] === undefined) {
-        res.status(404).json({"message": "Room not found."});
-        return;
-    }
-
-    ROOMS[roomID]["users"][player] = {
-        "username" : player,
-        "id" : uid.rnd(),
-        "points" : 0,
-        "questionNumber" : 0
-    };
 
     res.status(200).json({"message": "Joined room."});
 });
