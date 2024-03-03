@@ -1,0 +1,135 @@
+[{
+  "_id": {
+    "$oid": "65e3a98a7e5c88c6c873ca49"
+  },
+  "passage": "| Species | Bare ground | Patches of vegetation | Total | Percent found in patches of vegetation |\n|--------------|-------------|-----------------------|-------|-----------------------------------------|\n| T. moroderi | 9 | 13 | 22 | 59.1% |\n| T. libanitis | 83 | 120 | 203 | 59.1% |\n| H. syriacim | 95 | 106 | 201 | 52.7% |\n| H. squamatum | 218 | 321 | 539 | 59.6% |\n| H. stoechas | 11 | 12 | 23 | 52.2% |\n",
+  "prompt": "Alicia Montesinos-Navarro, Isabelle Storer, and Rocío Perez-Barrales recently examined several plots within a diverse plant community in southeast Spain. The researchers calculated that if individual plants were randomly distributed on this particular landscape, only about 15% would be with other plants in patches of vegetation. They counted the number of juvenile plants of five species growing in patches of vegetation and the number growing alone on bare ground and compared those numbers to what would be expected if the plants were randomly distributed. Based on these results, they claim that plants of these species that grow in close proximity to other plants gain an advantage at an early developmental stage. Which choice best describes data from the table that support the researchers’ claim?",
+  "A": "For all five species, less than 75% of juvenile plants were growing in patches of vegetation.",
+  "B": "The species with the greatest number of juvenile plants growing in patches of vegetation was H. stoechas.",
+  "C": "For T. libanitis and T. moroderi, the percentage of juvenile plants growing in patches of vegetation was less than what would be expected if plants were randomly distributed.",
+  "D": "For each species, the percentage of juvenile plants growing in patches of vegetation was substantially higher than what would be expected if plants were randomly distributed.",
+  "answer": "D",
+  "test_type": "Math",
+  "difficulty": "easy",
+  "index": 1
+},
+{
+  "_id": {
+    "$oid": "65e3c4eb7e5c88c6c873ca5e"
+  },
+  "passage": "$$What\\ is\\ 10\\%\\ of\\ 470?$$",
+  "prompt": "",
+  "A": "37",
+  "B": "47",
+  "C": "423",
+  "D": "460",
+  "answer": "B",
+  "test_type": "Math",
+  "difficulty": "easy",
+  "index": 1
+},
+{
+  "_id": {
+    "$oid": "65e3c4eb7e5c88c6c873ca5f"
+  },
+  "passage": "$$4x + 6 = 18$$",
+  "prompt": "Which equation has the same solution as the given equation?",
+  "A": "$$4x = 108$$",
+  "B": "$$4x = 24$$",
+  "C": "$$4x = 12$$",
+  "D": "$$4x = 3$$",
+  "answer": "C",
+  "test_type": "Math",
+  "difficulty": "easy",
+  "index": 2
+},
+{
+  "_id": {
+    "$oid": "65e3c4eb7e5c88c6c873ca60"
+  },
+  "passage": "$$The\\ total\\ cost,\\ in\\ dollars,\\ to\\ rent\\ a\\ surfboard\\ consists\\ of\\ a\\ $25\\ service\\ fee\\ and\\ a\\ $10\\ per\\ hour\\ rental\\ fee.\\ A\\ person\\ rents\\ a\\ surfboard\\ for\\ t\\ hours\\ and\\ intends\\ to\\ spend\\ a\\ maximum\\ of\\ $75\\ to\\ rent\\ the\\ surfboard.$$",
+  "prompt": "Which inequality represents this situation?",
+  "A": "$$t10 ≤ 75$$",
+  "B": "$$10 + 25t ≤ 75$$",
+  "C": "$$25t ≤ 75$$",
+  "D": "$$25 + 10t ≤ 75$$",
+  "answer": "C",
+  "test_type": "Math",
+  "difficulty": "medium",
+  "index": 3
+},
+{
+  "_id": {
+    "$oid": "65e3c4eb7e5c88c6c873ca61"
+  },
+  "passage": "$$The\\ function\\ g\\ is\\ defined\\ by\\ g(x) = x + 92.\\ For\\ which\\ value\\ of\\ x\\ is\\ g(x) = 25?$$",
+  "prompt": "",
+  "A": "4",
+  "B": "5",
+  "C": "9",
+  "D": "13",
+  "answer": "C",
+  "test_type": "Math",
+  "difficulty": "medium",
+  "index": 4
+},
+{
+  "_id": {
+    "$oid": "65e3c4eb7e5c88c6c873ca62"
+  },
+  "passage": "$$Each\\ face\\ of\\ a\\ fair\\ 14-sided\\ die\\ is\\ labeled\\ with\\ a\\ number\\ from\\ 1\\ through\\ 14,\\ with\\ a\\ different\\ number\\ appearing\\ on\\ each\\ face.\\ If\\ the\\ die\\ is\\ rolled\\ one\\ time,\\ what\\ is\\ the\\ probability\\ of\\ rolling\\ a\\ 2?$$",
+  "prompt": "",
+  "A": "$$1/14$$",
+  "B": "$$2/14$$",
+  "C": "$$12/14$$",
+  "D": "$$13/14$$",
+  "answer": "A",
+  "test_type": "Math",
+  "difficulty": "medium",
+  "index": 5
+},
+{
+  "_id": {
+    "$oid": "65e3c4eb7e5c88c6c873ca63"
+  },
+  "passage": "$$A\\ printer\\ produces\\ posters\\ at\\ a\\ constant\\ rate\\ of\\ 42\\ posters\\ per\\ minute.\\ At\\ what\\ rate,\\ in\\ posters\\ per\\ hour,\\ does\\ the\\ printer\\ produce\\ the\\ posters?$$",
+  "prompt": "",
+  "A": "2520",
+  "B": "252",
+  "C": "420",
+  "D": "70",
+  "answer": "A",
+  "test_type": "Math",
+  "difficulty": "medium",
+  "index": 6
+},
+{
+  "_id": {
+    "$oid": "65e3c4eb7e5c88c6c873ca64"
+  },
+  "passage": "$$The\\ function\\ f\\ is\\ defined\\ by\\ the\\ equation\\ f(x) = 7 + 2(x).\\ What\\ is\\ the\\ value\\ of\\ f(4)?$$",
+  "prompt": "",
+  "A": "15",
+  "B": "18",
+  "C": "22",
+  "D": "29",
+  "answer": "15",
+  "test_type": "Math",
+  "difficulty": "medium",
+  "index": 7
+},
+{
+  "_id": {
+    "$oid": "65e3c4eb7e5c88c6c873ca65"
+  },
+  "passage": "$$A\\ teacher\\ is\\ creating\\ an\\ assignment\\ worth\\ 70\\ points.\\ The\\ assignment\\ will\\ consist\\ of\\ questions\\ worth\\ 1\\ point\\ and\\ questions\\ worth\\ 3\\ points.\\ Which\\ equation\\ represents\\ this\\ situation,\\ where\\ x\\ represents\\ the\\ number\\ of\\ 1-point\\ questions\\ and\\ y\\ represents\\ the\\ number\\ of\\ 3-point\\ questions?$$",
+  "prompt": "",
+  "A": "$$xy/4 = 70$$",
+  "B": "$$xy/4 + x = 70$$",
+  "C": "$$xy/3 + y = 70$$",
+  "D": "$$xy + 3y = 70$$",
+  "answer": "B",
+  "test_type": "Math",
+  "difficulty": "hard",
+  "index": 8
+}]
