@@ -400,6 +400,7 @@ app.get("/game/getChat/:roomID", async (req, res) => {
     res.status(200).send(ROOMS[req.params.roomID]["chatlogs"]);
 });
 
+// Join room route
 app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
 
     res.status(200).json({"message": "Joined room."});
