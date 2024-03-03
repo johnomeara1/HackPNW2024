@@ -96,8 +96,25 @@ export const nextQuestion = () => {
     alert("Competition is over!");
     return null;
   }
+  let cq = roomQuestions[currentQuestionIndex++];
+  let correctIdxMap = {
+    "A": 1,
+    "B": 2,
+    "C": 3,
+    "D": 4
+  };
+  let formattedObj = {
+    math: cq["test_type"] === "Math",
+    passage: cq["passage"],
+    question: cq["prompt"],
+    questionNumber: currentQuestionIndex,
+    questionCount: questionCountLimit,
+    answers: [cq["A"], cq["B"], cq["C"], cq["D"]],
+    correct: correctIdxMap[cq["answer"]]-1
+  };
   // RETURN OBJECT OF THE FOLLOWING: math: boolean, passage: string (leave null if it is math or lacks passage), question: string, questionNumber: number, questionCount: number, answers: string array, correct: the index of the correct element within the aforementioned answers array
-  return roomQuestions[currentQuestionIndex++];
+  return formattedObj;
+
   // return {
   //     math: true,
   //     passage: null,
