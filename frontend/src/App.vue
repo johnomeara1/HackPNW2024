@@ -1,14 +1,40 @@
 <script setup>
-// import * as client from './mockClient.js';
+import * as client from './mockClient.js';
+import confetti from 'canvas-confetti';
 import { onMounted, ref, watch } from 'vue';
 import markdownit from 'markdown-it';
 import math_plugin from '@traptitech/markdown-it-katex';
-import { io } from "socket.io-client";
-import * as client from "./client.js";
 
-client.getRoomData((data) => {
-  alert(data);
-})
+function confettiStarryShit() {
+  var defaults = {
+    spread: 360,
+    ticks: 50,
+    gravity: 0,
+    decay: 0.94,
+    startVelocity: 30,
+    colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
+  };
+
+  function shoot() {
+    confetti({
+      ...defaults,
+      particleCount: 40,
+      scalar: 1.2,
+      shapes: ['star']
+    });
+
+    confetti({
+      ...defaults,
+      particleCount: 10,
+      scalar: 0.75,
+      shapes: ['circle']
+    });
+  }
+
+  setTimeout(shoot, 0);
+  setTimeout(shoot, 100);
+  setTimeout(shoot, 200);
+}
 
 const md = markdownit();
 
@@ -19,9 +45,8 @@ if (questionRaw.value.math) {
   questionRaw.value.passage = ""
 }
 
-
-const math = ref(questionRaw.value.math)
-const passage = ref(questionRaw.value.passage)
+const math = ref(null)
+const passage = ref(null)
 const passageHtml = ref(null)
 
 const sideOpen = ref(false)
@@ -42,9 +67,8 @@ const parsePassage = (passage) => {
 }
 
 watch(passage, parsePassage)
-parsePassage(passage.value)
 
-const question = ref(questionRaw.value.question)
+const question = ref(null)
 const questionHtml = ref("")
 
 const parseQuestion = (question) => {
@@ -52,8 +76,6 @@ const parseQuestion = (question) => {
 }
 
 watch(question, parseQuestion)
-
-parseQuestion(question.value)
 
 onMounted(async () => {
   if (!sideDisabled.value) {
@@ -86,13 +108,12 @@ const chat = ref([
   ["John", "this is an example message"]
 ])
 
-const answers = ref(questionRaw.value.answers.map((a) => [a, false]))
+const answers = ref(null)
 const answersHtml = ref([["", false], ["", false], ["", false], ["", false]])
 const onAnswersChanged = (answers) => {
   answersHtml.value = answers.map((a) => [md.render(a[0],), a[1]]);
 }
 watch(answers, onAnswersChanged)
-onAnswersChanged(answers.value)
 
 const toggleA = () => {
   answers.value[1][1] = false;
@@ -122,15 +143,64 @@ const toggleD = () => {
   answers.value[3][1] = !answers.value[3][1]
 }
 
+const correctIndex = ref(-1)
+
+const continueDisabled = ref(true)
+const continueText = ref("Continue in 3")
+
 const submit = () => {
   const index = answers.value.findIndex((a) => {
     return a[1]
   })
   if (index !== -1) {
     const result = client.validateQuestion(questionRaw.value, index)
-    alert(result)
+    if (result) {
+      questionRaw.value = client.nextQuestion()
+    } else {
+      correctIndex.value = questionRaw.value.correct
+      continueDisabled.value = true;
+      continueText.value = "Continue in 3"
+      setTimeout(() => {
+        continueText.value = "Continue in 2"
+        setTimeout(() => {
+          continueText.value = "Continue in 1"
+          setTimeout(() => {
+            continueText.value = "Continue"
+            continueDisabled.value = false;
+          }, 1000)
+        }, 1000)
+      }, 1000)
+    }
   }
 }
+
+const continueIncorrect = () => {
+  questionRaw.value = client.nextQuestion()
+}
+
+const soloDone = ref(false);
+
+const questionUpdated = (questionRaw) => {
+  if (questionRaw === null) {
+    sideOpen.value = false;
+    sideDisabled.value = true;
+    soloDone.value = true;
+    confettiStarryShit()
+  } else {
+    correctIndex.value = -1
+    let passageCopy = questionRaw.passage;
+    if (questionRaw.math) {
+      passageCopy = ""
+    }
+    math.value = questionRaw.math
+    passage.value = passageCopy
+    question.value = questionRaw.question
+    answers.value = questionRaw.answers.map((a) => [a, false]);
+  }
+}
+
+watch(questionRaw, questionUpdated)
+questionUpdated(questionRaw.value)
 
 </script>
 
@@ -207,50 +277,54 @@ const submit = () => {
       </div>
       <div class="flex-1 flex flex-col">
         <div class="flex flex-row flex-1 min-h-0">
-          <div class="flex flex-col p-4 flex-1 gap-6 ml-12 overflow-auto">
-            <div class="uppercase text-sm font-semibold opacity-70 mt-4">Question 4 of 14</div>
+          <div class="flex flex-col items-center justify-center flex-1 p-8" v-if="soloDone">
+            <div class="text-3xl font-bold mb-4">You finished! 🎉</div>
+            <div class="uppercase font-sm font-semibold opacity-70">Awaiting other players' completion</div>
+          </div>
+          <div class="flex flex-col p-4 flex-1 gap-6 ml-12 overflow-auto" v-if="!soloDone">
+            <div class="uppercase text-sm font-semibold opacity-70 mt-4">Question {{ (questionRaw !== null ?
+              questionRaw.questionNumber : "") }} of {{ (questionRaw !== null ? questionRaw.questionCount : "") }}</div>
             <div class="mt-2 mb-6 mr-12" v-html="questionHtml"></div>
             <button @click="toggleA"
-              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[0][1] ? 'bg-gray-100/90' : 'hover:bg-gray-100/50')">
+              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[0][1] ? 'bg-gray-100/90 ' : 'hover:bg-gray-100/50 ') + (correctIndex === 0 ? 'bg-green-300/40 border-green-400 text-green-800 ' : ' ') + (correctIndex !== -1 ? 'pointer-events-none ' : ' ')">
               <div
-                class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
+                :class="'rounded-full flex items-center justify-center font-bold border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all ' + (correctIndex === 0 ? 'bg-green-100 border-green-400 ' : 'bg-gray-50 ')">
                 A</div>
               <div class="text-left" v-html="answers[0][0]"></div>
             </button>
             <button @click="toggleB"
-              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[1][1] ? 'bg-gray-100/90' : 'hover:bg-gray-100/50')">
+              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[1][1] ? 'bg-gray-100/90 ' : 'hover:bg-gray-100/50 ') + (correctIndex === 1 ? 'bg-green-300/40 border-green-400 text-green-800 ' : ' ') + (correctIndex !== -1 ? 'pointer-events-none ' : ' ')">
               <div
-                class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
+                :class="'rounded-full flex items-center justify-center font-bold border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all ' + (correctIndex === 1 ? 'bg-green-100 border-green-400 ' : 'bg-gray-50 ')">
                 B</div>
               <div class="text-left" v-html="answers[1][0]"></div>
             </button>
             <button @click="toggleC"
-              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[2][1] ? 'bg-gray-100/90' : 'hover:bg-gray-100/50')">
+              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[2][1] ? 'bg-gray-100/90 ' : 'hover:bg-gray-100/50 ') + (correctIndex === 2 ? 'bg-green-300/40 border-green-400 text-green-800 ' : ' ') + (correctIndex !== -1 ? 'pointer-events-none ' : ' ')">
               <div
-                class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
+                :class="'rounded-full flex items-center justify-center font-bold border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all ' + (correctIndex === 2 ? 'bg-green-100 border-green-400 ' : 'bg-gray-50 ')">
                 C</div>
               <div class="text-left" v-html="answers[2][0]"></div>
             </button>
             <button @click="toggleD"
-              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[3][1] ? 'bg-gray-100/90' : 'hover:bg-gray-100/50')">
+              :class="'flex flex-row items-center gap-4 group border p-4 rounded-lg transition-all mr-12 active:scale-[0.98] ' + (answers[3][1] ? 'bg-gray-100/90 ' : 'hover:bg-gray-100/50 ') + (correctIndex === 3 ? 'bg-green-300/40 border-green-400 text-green-800 ' : ' ') + (correctIndex !== -1 ? 'pointer-events-none ' : ' ')">
               <div
-                class="rounded-full flex items-center justify-center font-bold bg-gray-50 border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all">
+                :class="'rounded-full flex items-center justify-center font-bold border-2 min-w-8 min-h-8 w-8 h-8 group-hover:bg-white transition-all ' + (correctIndex === 3 ? 'bg-green-100 border-green-400 ' : 'bg-gray-50 ')">
                 D</div>
               <div class="text-left" v-html="answers[3][0]"></div>
             </button>
-            <div class="pr-12 w-full flex flex-row justify-center">
-              <button @click="submit"
-                class="bg-[#6ba6ff] text-white rounded-md px-12 font-semibold p-1 ml-auto hover:scale-[1.05] hover:opacity-80 transition-all active:scale-[0.95]">Submit</button>
+            <div class="pr-12 w-full flex flex-row">
+              <button @click="submit" v-if="correctIndex === -1"
+                class="bg-[#6ba6ff] text-white rounded-md px-12 font-semibold p-1 ml-auto hover:scale-[1.05] hover:opacity-80 transition-all active:scale-[0.95] uppercase">Submit</button>
+              <button @click="continueIncorrect" v-if="correctIndex !== -1"
+                class="bg-[#636363] text-white rounded-md px-12 font-semibold p-1 ml-auto hover:scale-[1.05] hover:opacity-80 transition-all active:scale-[0.95] uppercase disabled:pointer-events-none disabled:opacity-80"
+                :disabled="continueDisabled">{{ continueText }}</button>
             </div>
           </div>
           <div class="w-1/3 border-l-2 bg-gray-50 min-h-0 flex flex-col">
             <div class="flex-1 p-4 flex flex-col-reverse gap-2 overflow-auto min-h-0">
-              <div class="text-left" v-for="message in chat.reverse()"><span class="font-bold">{{ message[0] }}:</span>
-                {{ message[1] }}</div>
-            </div>
-            <div>
-              <input class="border-t-2 outline-none w-full py-2 px-4" type="text" placeholder="Type a message" id="message-box" />
-              <button class="bg-[#6ba6ff] text-white w-full py-2 px-4" value="Send" @click="client.sendMessage()">Submit</button>
+              <div class="text-left" v-for="message in chat.reverse()"><span class="font-bold">{{ message[0] }}:</span> {{
+                message[1] }}</div>
             </div>
           </div>
         </div>
