@@ -8,6 +8,8 @@ const socket = io.connect(URL, {
   reconnect: true
 });
 
+let roomQuestions = [];
+
 var roomResponseFunction = function (data) {
   console.log(data);
 };
@@ -73,7 +75,13 @@ export function makeRoom() {
 }
 
 export function makeRoomClient (name, difficulty, testType, num) {
+  let roomIdReturnCode;
   socket.emit("makeRoom", { name, difficulty, testType, num });
+
+  socket.on('roomData', (response) => {
+    roomIdReturnCode = response["roomID"];
+  });
+  return roomIdReturnCode;
 }
 
 export function submitAnswer(roomID, player, letter) {
