@@ -133,16 +133,16 @@ io.on("connection", (socket) => {
     socket.on("leaderboard", (roomID) => {
         let roomIDused = roomID.roomID;
 
+        console.log("leadebriad")
         if (ROOMS[roomIDused] === undefined) {
             console.log("Room doesn't exist.")
             return;
         }
         let allUsers = ROOMS[roomIDused]["users"];
-        let leaderboard = {
-
-        };
+        let leaderboard = [];
 
         let usr_i = 0;
+
 
         for (let usr of allUsers) {
             // Let's just say that each question is worth 50 points for now.
@@ -153,7 +153,7 @@ io.on("connection", (socket) => {
                 "ratioCorrect" : usr["points"] / pointsPossible,
                 "finished" : (usr["questionIndex"] === ROOMS[roomIDused]["questions"].length)
             };
-            leaderboard[usr_i++] = lbObj;
+            leaderboard.push(lbObj);
         }
         console.log("Leaderboard requested for room " + roomIDused);
 

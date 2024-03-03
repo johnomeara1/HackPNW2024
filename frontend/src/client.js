@@ -44,7 +44,9 @@ socket.on("connect", () => {
     updateChat(msg);
   });
   socket.on("lboard", (msg) => {
-    onUpdateLeaderboard(msg);
+    console.log(msg)
+    updateLeaderboard(msg.map(i => [i['name'], i['radioCorrect'], i['finished']]));
+    // onUpdateLeaderboard(msg);
   });
 
   socket.on("gameStarted", (msg) => {
@@ -90,6 +92,7 @@ let updateChat; // args | OBJECT OF THE FOLLOWING: chat: array. Every element of
 export const onUpdateChat = (f) => { updateChat = f };
 let updateLeaderboard; // args | OBJECT OF THE FOLLOWING: leaderboard: array. Every element of `leaderboard` represents a player. Each player should be an array like this: [name, ratioCorrect, finished] where name is the player name, ratioCorrect is a decimal value (correctly answered / total questions), and finished is whether the player is done or not
 export const onUpdateLeaderboard = (f) => { updateLeaderboard = f };
+
 // make this function instant
 let currentQuestionIndex = 0;
 export const nextQuestion = () => {
@@ -134,6 +137,7 @@ export const validateQuestion = (question, selectedAnswerIndex) => { // the ques
   socket.emit("submitAnswer", {
     globalUser, globalRoomId, state
   });
+  socket.emit("leaderboard", { roomID: globalRoomId });
   return question.correct === selectedAnswerIndex
 }
 export const sendChatMessage = (chatMessage) => {
