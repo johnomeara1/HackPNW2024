@@ -64,8 +64,9 @@ io.on("connection", (socket) => {
     socket.on("join", (data) => {
         let roomID = data.roomID;
         let player = data.player;
-
+        console.log("joined...");
         if (ROOMS[roomID] === undefined) {
+            console.log("room dont exist");
             return;
         }
 
@@ -76,6 +77,7 @@ io.on("connection", (socket) => {
             "questionNumber" : 0
         };
         socket.emit("joined", {"roomID" : roomID, "username" : player});
+        console.log(JSON.stringify({"roomID" : roomID, "username" : player}));
         //socket.emit("newMessage", {"roomID": roomID, "message": `${player} has joined the room.`});
     });
 
@@ -84,7 +86,7 @@ io.on("connection", (socket) => {
         let roomID = data.roomID;
         let msg = data.message;
         let player = data.player;
-        let date = data.date;
+        //let date = new Date();
 
         // console.log("Chat message received: " + msg + " from " + player + " in room " + roomID + " at " + date);
         if (ROOMS[roomID] === undefined) {
@@ -108,18 +110,18 @@ io.on("connection", (socket) => {
     });
 
     socket.on("submitAnswer", (data) => {
-        
+        let correctOrNot = data.state;
+        let user = data.globalUser;
+        let roomID = data.globalRoomId;
+
+        console.log("Answer submitted: " + JSON.stringify(data));
+        ROOMS[roomID]["users"][user]["points"] += ( (correctOrNot) ? 50 : 0 );
         console.log("Answer submitted: " + data);
     });
 
     socket.on("status", (roomID) => {
         console.log("Status requested for room " + roomID);
     });
-
-    // socket.on("joinRoom", (roomID, username) => {
-    //     console.log("Joining room " + roomID);
-    //     socket.emit("joinedRoom", `New user, ${username} has joined the room.`)
-    // });
 
     socket.on("leaderboard", (roomID) => {
         let roomIDused = roomID.roomID;

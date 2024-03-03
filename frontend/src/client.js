@@ -8,6 +8,7 @@ const socket = io.connect(URL, {
   reconnect: true
 });
 let roomQuestions = [];
+let globalUser;
 export let globalRoomId;
 var roomResponseFunction = function (data) {
   console.log(data);
@@ -27,6 +28,7 @@ socket.on("connect", () => {
   });
   socket.on("newMessage", (msg) => {
     if (!roomData || msg.roomID != roomData["roomID"]) return;
+    console.log(msg)
     updateChat(msg);
   });
   socket.on("lboard", (msg) => {
@@ -59,16 +61,9 @@ export function makeRoomClient(name, difficulty, testType, num) {
   return roomIdReturnCode;
 }
 
-export function submitAnswer(roomID, player, letter) {
-  return getData(`/game/submitAnswer/${roomID}/player/${player}/letter/${letter}`);
-}
-
-export function getStatus(roomID) {
-  return getData(`/game/status/${roomID}`);
-}
-
 export function joinRoom(roomID, player) {
   socket.emit("join", { roomID, player });
+  globalUser = player;
 }
 
 export function getLeaderBoard(roomID) {
@@ -119,9 +114,18 @@ export const validateQuestion = (question, selectedAnswerIndex) => { // the ques
   // let server know that the question was correct / incorrect
   // to make this function instant, you'd want to not use await on the fetch call. It should just ping the server but not worry about the response
   // return whether it was correct / incorrect in true / false - you dont need server response for this bc it's a simple if check.
-  socket.emit("submitAnswer", {})
+  let state = (question.correct === selectedAnswerIndex);
+  socket.emit("submitAnswer", {
+    globalUser, globalRoomId, state
+  });
   return question.correct === selectedAnswerIndex
 }
 export const sendChatMessage = (chatMessage) => {
-  socket.emit("message", {})
+  console.log("GLOBAL USER: " + globalUser);
+  let finalObj = {
+    roomID: globalRoomId,
+    message: chatMessage,
+    player: globalUser
+  };
+  socket.emit("message", finalObj);
 }

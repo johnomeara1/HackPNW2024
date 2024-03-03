@@ -310,7 +310,12 @@ const sendChatMessage = () => {
                             }}:</span> {{
     message[1] }}</div>
                         </div>
-                        <input class="border-t-2 outline-none w-full py-2 px-4" type="text" v-on:keyup.enter="sendChatMessage" v-model="chatMsg" placeholder="Send a message" />
+                        <div>
+                            <input class="border-t-2 outline-none w-full py-2 px-4" type="text" v-on:keyup.enter="sendChatMessage" v-model="chatMsg" placeholder="Send a message" />
+                            
+                            <button @click="sendChatMessage"
+                                class="w-full bg-[#6ba6ff] text-white px-12 font-semibold p-1 ml-auto hover:opacity-80 transition-all active:opacity-[0.95] uppercase">Send</button>
+                        </div>
                     </div>
                 </div>
                 <div class="min-h-64 overflow-auto border-t-2 bg-transparent flex flex-col gap-4 relative justify-center">
