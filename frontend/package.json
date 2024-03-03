@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@traptitech/markdown-it-katex": "^3.6.0",
+    "canvas-confetti": "^1.9.2",
     "cors": "^2.8.5",
     "markdown-it": "^14.0.0",
     "socket.io-client": "^4.7.4",
