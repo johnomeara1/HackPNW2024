@@ -2,17 +2,29 @@ const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const app = express();
 const port = 3000;
-const dbclient = new MongoClient("mongodb://localhost:27017/");
 
 const ShortUniqueId = require('short-unique-id');
 
 let conn;
 let db;
 
+const https = require('https');
+const server = https.createServer(app).listen(port);
+const io = require("socket.io")(server);
+
+io.socket.on("connection", (socket) => {
+    console.log("A user connected.");
+    socket.on("disconnect", () => {
+        console.log("A user disconnected.");
+    });
+});
+
 const uid = new ShortUniqueId({
     dictionary: "abcdefghijklmnopqrstuvwxyz".toUpperCase().split(""),
     length: 4
 });
+
+const dbclient = new MongoClient("mongodb://localhost:27017/");
 
 // or using default dictionaries available since v4.3+
 
