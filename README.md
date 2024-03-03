@@ -56,9 +56,12 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+When we first heard the prompt, "Make the Boring Not Boring," we unanimously jumped to the most procrastinated, most mind-numbing, and most boring thing we all had to go through right now and this week: SAT test prep. 
+We loved online competitive platforms for coding, like Clash of Code or CF or the now-deleted binarysearch.com, and we wondered: how do they turn the mundane task of practicing into something so exciting and still extremely educational? 
+We realized that the ultimate solution to SAT prep was SATShark, an easy-to-use, community multiplayer website where users can make private lobbies, load up a queue of questions, and race to finish all the questions correctly before their friends do.
+It takes inspiration from CodinGame, LeetCode, the College Board, and multiplayer games like Valorant and Apex to create a competition that maximizes attention and incentivizes users to become the best SAT takers they can be and turn SAT testing into an immensely fun experience.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -66,14 +69,10 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
 * [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+* EXPRESS
+* Tailwind
+* MongoDB
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -82,32 +81,11 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Insatll [Node.JS](https://nodejs.org/en), and in each `frontend` and `backend` folder, run `npm i` to install each library. After, run `npm run dev` from each respective end-point to run the dev server.
 
-### Prerequisites
+Insatll [MongoDB](https://www.mongodb.com/) and import the sample DBs from the `./backend/server/mongo/`
 
-There are sevearl
-* npm
-  ```sh
-  npm i
-  ```
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+Make sure to update the DB URL in `./backend/server/index.js` and change the back-end API link in the `./frontend/src/client.js`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -116,9 +94,7 @@ There are sevearl
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+The front end URL should be `https://localhost:5173` and the backend `https://localhost:3000`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -127,10 +103,9 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [ ] AP Exam databse 
+- [ ] Online Features 
+    - [ ] Chat Feature
 
 See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
 
@@ -159,18 +134,18 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+TBD
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- CONTACT -->
-## Contact
+<!-- ## Contact
 
 Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name) -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -179,9 +154,10 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [Aditya Bankoti]()
+* [Ian Kim]()
+* [Berkan Mertan]()
+* [John O'Meara]()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
