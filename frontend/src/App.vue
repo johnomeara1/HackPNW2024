@@ -8,10 +8,14 @@ const md = markdownit();
 
 md.use(math_plugin, { "blockClass": "math-block", "errorColor": " #cc0000" });
 
-const math = ref(false)
-const passage = ref(String.raw`
-# this is an example passage
-`)
+const questionRaw = ref(client.nextQuestion())
+if(questionRaw.value.math) {
+  questionRaw.value.passage = ""
+}
+
+
+const math = ref(questionRaw.value.math)
+const passage = ref(questionRaw.value.passage)
 const passageHtml = ref(null)
 
 const sideOpen = ref(false)
@@ -34,7 +38,7 @@ const parsePassage = (passage) => {
 watch(passage, parsePassage)
 parsePassage(passage.value)
 
-const question = ref("This is an example of $c = \\pm\\sqrt{a^2 + b^2}$ a question. Berkan and pennywise chilling in an ally looking for their next victim. The question continues and this is more of the question. And more and more.")
+const question = ref(questionRaw.value.question)
 const questionHtml = ref("")
 
 const parseQuestion = (question) => {
@@ -76,7 +80,7 @@ const chat = ref([
   ["John", "this is an example message"]
 ])
 
-const answers = ref([["dasdsadsa", false], ["dsadsasda", false], ["dadsadsa", false], ["dsadsadsadsaa", false]])
+const answers = ref(questionRaw.value.answers.map((a) => [a, false]))
 const answersHtml = ref([["", false], ["", false], ["", false], ["", false]])
 const onAnswersChanged = (answers) => {
   answersHtml.value = answers.map((a) => [md.render(a[0],), a[1]]);
@@ -112,14 +116,13 @@ const toggleD = () => {
   answers.value[3][1] = !answers.value[3][1]
 }
 
-const questionRaw = ref(null)
-
 const submit = () => {
   const index = answers.value.findIndex((a) => {
     return a[1]
   })
   if(index !== -1) {
-    client.validateQuestion(questionRaw, index)
+    const result = client.validateQuestion(questionRaw.value, index)
+    alert(result)
   }
 }
 
@@ -203,7 +206,7 @@ const submit = () => {
             </button>
             <div class="pr-12 w-full flex flex-row justify-center">
               <button @click="submit"
-                class="bg-[#6ba6ff] text-white rounded-md px-6 font-semibold p-1 mx-auto hover:scale-[1.05] hover:opacity-80 transition-all active:scale-[0.95]">Submit</button>
+                class="bg-[#6ba6ff] text-white rounded-md px-12 font-semibold p-1 ml-auto hover:scale-[1.05] hover:opacity-80 transition-all active:scale-[0.95]">Submit</button>
             </div>
           </div>
           <div class="w-1/3 border-l-2 bg-gray-50 min-h-0 flex flex-col">
