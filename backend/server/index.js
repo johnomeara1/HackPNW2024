@@ -11,6 +11,7 @@ let db;
 
 const uid = new ShortUniqueId({
     dictionary: "abcdefghijklmnopqrstuvwxyz".toUpperCase().split(""),
+    length: 4
 });
 
 // or using default dictionaries available since v4.3+
@@ -142,15 +143,16 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
         let currQuery = await queryMongo({
             "difficulty" : { $in: parsedDiffArr }
         }, ty);
-        allQuestions.push(currQuery);
+        allQuestions = allQuestions.concat(currQuery);
     }
 
-    res.status(200).send(allQuestions);
+    console.log(allQuestions);
+    
 
     let roomID = "";
 
     while (true) {
-        roomID = uid(4);
+        roomID = uid.rnd();
         if (ROOMS[roomID] === undefined && roomID != "") {
             break;
         }
@@ -161,6 +163,8 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
         "questions" : allQuestions,
         "roomID": roomID
     };
+
+    res.status(200).send(ROOMS[roomID]);
 
     // BEFORE THIS POINT IS GENERATING QUESTIONS
 });
@@ -174,6 +178,15 @@ app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, 
     let roomID = req.params.roomID;
     let answer = req.params.letter;
     let player = req.params.player;
+
+    console.log(player)
+
+    console.log(ROOMS[roomID])
+
+    if (ROOMS[roomID]["users"][player] === undefined ) {
+        res.status(200).send("Player not found silly goose!!");
+        return;
+    }
     let questionNumber = ROOMS[roomID]["users"][player]["questionNumber"]; 
 
     if (ROOMS[roomID] === undefined) {
@@ -213,7 +226,7 @@ app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
 
     ROOMS[roomID]["users"][player] = {
         "username" : player,
-        "id" : uid(8),
+        "id" : uid.rnd(),
         "points" : 0,
         "questionNumber" : 0
     };
