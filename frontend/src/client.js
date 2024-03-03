@@ -1,7 +1,23 @@
-const URL = "https://honest-solely-emu.ngrok-free.app/";
+const URL = "http://localhost:3000";
+
+import { io } from "socket.io-client";
+const socket = io.connect(URL, {
+  extraHeaders: {
+    "Access-Control-Allow-Origin": "*"
+  },
+  reconnect: true
+});
+
+// socket.emit("join", "ASJ8");
 
 async function getData(ext) {
-  let response = await fetch(URL + ext);
+  let response = await fetch(URL + ext, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    }
+  });
   return response.json();
 }
 
@@ -19,4 +35,8 @@ async function getStatus(roomID) {
 
 async function joinRoom(roomID, player) {
   return await getData(`/game/joinRoom/${roomID}/player/${player}`);
+}
+
+async function getLeaderBoard(roomID) {
+  let users = await getStatus();
 }
