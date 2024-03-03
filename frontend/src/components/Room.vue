@@ -55,8 +55,11 @@ const questionRaw = ref({
     correct: 2
 })
 
+const dataGot = ref(false)
+
 client.onGotData(() => {
     questionRaw.value = client.nextQuestion();
+    dataGot.value = true;
 })
 
 const math = ref(null)
@@ -215,13 +218,17 @@ const questionUpdated = (questionRaw) => {
 watch(questionRaw, questionUpdated)
 questionUpdated(questionRaw.value)
 
-const onUpdateLeaderboard = () => {
-
+const onUpdateLeaderboard = (leaderboardNew) => {
+    tracker.value = leaderboardNew;
 }
+
+client.onUpdateLeaderboard(onUpdateLeaderboard)
 
 const onUpdateChat = (chatNew) => {
     chat.value = chatNew
 }
+
+client.onUpdateChat(onUpdateChat)
 
 const chatMsg = ref("")
 
@@ -232,6 +239,9 @@ const sendChatMessage = () => {
 </script>
 
 <template>
+    <div class="absolute z-[9999] w-screen h-screen bg-white flex items-center justify-center text-xl p-8 font-semibold" v-if="!dataGot">
+        Connecting...
+    </div>
     <div class="absolute z-[9999] w-screen h-screen bg-gray-200 flex items-center justify-center text-xl p-8 md:hidden">
         Sorry! SATShark currently only supports suitable desktop viewports. Try resizing the window to be larger.
     </div>

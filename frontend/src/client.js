@@ -22,7 +22,8 @@ let questionCountLimit;
 let onStartAdapter;
 export const onStart = (f) => { onStartAdapter = f };
 
-let onGotDataAdapter;
+export let gotData = false;
+let onGotDataAdapter = () => {};
 export const onGotData = (f) => { onGotDataAdapter = f };
 
 
@@ -34,7 +35,7 @@ socket.on("connect", () => {
     roomQuestions = data["questions"];
     questionCountLimit = data["questions"].length;
     onGotDataAdapter()
-
+    gotData = true
     console.log("GOTTEN DATA");
   });
   socket.on("newMessage", (msg) => {
