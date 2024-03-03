@@ -15,6 +15,7 @@ export default function setRoomResponseFunction(f) {
   roomResponseFunction = f;
 }
 var roomData = null;
+let questionCountLimit;
 socket.on("connect", () => {
   console.log("Connected to server");
   socket.on("roomData", (data) => {
@@ -89,13 +90,14 @@ export const onUpdateChat = (f) => { updateChat = f };
 let updateLeaderboard; // args | OBJECT OF THE FOLLOWING: leaderboard: array. Every element of `leaderboard` represents a player. Each player should be an array like this: [name, ratioCorrect, finished] where name is the player name, ratioCorrect is a decimal value (correctly answered / total questions), and finished is whether the player is done or not
 export const onUpdateLeaderboard = (f) => { updateLeaderboard = f };
 // make this function instant
+let currentQuestionIndex = 0;
 export const nextQuestion = () => {
   if (currentQuestionIndex > questionCountLimit) {
     alert("Competition is over!");
-    return undefined;
+    return null;
   }
   // RETURN OBJECT OF THE FOLLOWING: math: boolean, passage: string (leave null if it is math or lacks passage), question: string, questionNumber: number, questionCount: number, answers: string array, correct: the index of the correct element within the aforementioned answers array
-  return roomQuestions[currentQuestionIndex];
+  return roomQuestions[currentQuestionIndex++];
   // return {
   //     math: true,
   //     passage: null,
