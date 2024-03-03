@@ -49,6 +49,34 @@ io.on("connection", (socket) => {
         socket.join(roomID);
         console.log("Joined room " + roomID);
     });
+
+    socket.on("chat", (msg) => {
+        console.log("Chat message: " + msg);
+    });
+
+    socket.on("submitAnswer", (data) => {
+        console.log("Answer submitted: " + data);
+    });
+
+    socket.on("status", (roomID) => {
+        console.log("Status requested for room " + roomID);
+    });
+
+    socket.on("joinRoom", (roomID) => {
+        console.log("Joining room " + roomID);
+    });
+
+    socket.on("leaderboard", (roomID) => {
+        console.log("Leaderboard requested for room " + roomID);
+    });
+
+    socket.on("makeRoom", (data) => {
+        console.log9("Room made: " + data);
+    });
+
+    socket.on("getQuestion", (roomID) => {
+        console.log("Question requested for room " + roomID);
+    });
 });
 
 io.on("join", (roomID) => {

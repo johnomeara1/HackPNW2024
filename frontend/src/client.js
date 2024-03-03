@@ -8,10 +8,7 @@ const socket = io.connect(URL, {
   reconnect: true
 });
 
-socket.emit("join", "ASJ8");
-socket.on("hello", (data) => {
-  console.log(data);
-});
+// socket.emit("join", "ASJ8");
 
 async function getData(ext) {
   let response = await fetch(URL + ext, {
