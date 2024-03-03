@@ -96,7 +96,7 @@ app.get("/insertData/:collectionName/data/:insertData", (req, res) => {
         if(err) throw err;
         db.close();
     });
-    res.status(200).send("Done.");
+    res.status(200).json({message: "Done."});
 });
 
 // Create a collection purely by name
@@ -106,7 +106,7 @@ app.get("/createCollection/:collectionName", (req, res) => {
         if(err) throw err;
         db.close();
     });
-    res.status(200).send("Done.");
+    res.status(200).json({message: "Done."});
 });
 
 // Run a query, use JSON with surrounding brackets as the query.
@@ -146,9 +146,6 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
         allQuestions = allQuestions.concat(currQuery);
     }
 
-    console.log(allQuestions);
-    
-
     let roomID = "";
 
     while (true) {
@@ -164,9 +161,7 @@ app.get("/game/makeRoom/:name/difficulty/:diff/type/:testType/count/:questionCou
         "roomID": roomID
     };
 
-    res.status(200).send(ROOMS[roomID]);
-
-    // BEFORE THIS POINT IS GENERATING QUESTIONS
+    res.status(200).json(ROOMS[roomID]);
 });
 
 app.listen(port, () => {
@@ -179,18 +174,14 @@ app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, 
     let answer = req.params.letter;
     let player = req.params.player;
 
-    console.log(player)
-
-    console.log(ROOMS[roomID])
-
     if (ROOMS[roomID]["users"][player] === undefined ) {
-        res.status(200).send("Player not found silly goose!!");
+        res.status(404).json({"message": "User not found."});
         return;
     }
     let questionNumber = ROOMS[roomID]["users"][player]["questionNumber"]; 
 
     if (ROOMS[roomID] === undefined) {
-        res.status(200).send("Room not found.");
+        res.status(404).json({"message": "Room not found."});
         return;
     }
 
@@ -200,16 +191,17 @@ app.get("/game/submitAnswer/:roomID/player/:player/letter/:letter", async (req, 
         ROOMS[roomID]["users"][player]["points"]++;
     } 
 
+    ROOMS[roomID]["users"][player]["questionNumber"]++;
+    
     res.status(200).json({
         "correct" : correctAns 
     });
-    ROOMS[roomID]["users"][player]["questionNumber"]++;
 });
 
 app.get("/game/status/:roomID", async (req, res) => {
     let roomID = req.params.roomID;
     if (ROOMS[roomID] === undefined) {
-        res.status(200).send("Room not found.");
+        res.status(404).json({"message": "Room not found."});
         return;
     }
 
@@ -225,7 +217,7 @@ app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
     let roomID = req.params.roomID;
     let player = req.params.player;
     if (ROOMS[roomID] === undefined) {
-        res.status(200).send("Room not found.");
+        res.status(404).json({"message": "Room not found."});
         return;
     }
 
@@ -236,5 +228,5 @@ app.get("/game/joinRoom/:roomID/player/:player", async (req, res) => {
         "questionNumber" : 0
     };
 
-    res.status(200).send("Joined room.");
+    res.status(200).json({"message": "Joined room."});
 });
