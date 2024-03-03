@@ -1,4 +1,4 @@
-const URL = "http://localhost:3000";
+const URL = "https://honest-solely-emu.ngrok-free.app/";
 
 import { io } from "socket.io-client";
 const socket = io.connect(URL, {
@@ -9,9 +9,7 @@ const socket = io.connect(URL, {
 });
 
 let roomQuestions = [];
-let globalRoomId;
-let currentQuestionIndex = 0;
-let questionCountLimit;
+export let globalRoomId;
 
 var roomResponseFunction = function (data) {
   console.log(data);

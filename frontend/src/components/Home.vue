@@ -1,6 +1,7 @@
 <script setup>
+import * as client from '../client.js';
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -15,10 +16,33 @@ const math = ref(true);
 const easy = ref(true);
 const medium = ref(true);
 const hard = ref(true);
+const questionCount = ref(20);
 
 const createRoom = () => {
     if (username.value.length > 0 && roomName.value.length > 0) {
-        
+        const difficulty = [];
+        if(easy.value) {
+            difficulty.push("easy")
+        }
+        if(medium.value) {
+            difficulty.push("medium")
+        }
+        if(hard.value) {
+            difficulty.push("hard")
+        }
+        const type = [];
+        if(english.value) {
+            type.push("English")
+        }
+        if(math.value) {
+            type.push("Math")
+        }
+        client.makeRoomClient(roomName, difficulty, type, questionCount.value);
+        setTimeout(() => {
+            if(typeof(client.globalRoomId) !== "undefined") {
+                alert(client.globalRoomId)
+            }
+        }, 100)
     }
 }
 
@@ -27,6 +51,18 @@ const joinRoom = () => {
         router.push('/' + joinCode.value + "?username=" + username.value)
     }
 }
+
+onMounted(() => {
+    const numInputs = document.querySelectorAll('input[type=number]')
+
+    numInputs.forEach(function (input) {
+        input.addEventListener('change', function (e) {
+            if (e.target.value == '') {
+                e.target.value = 20
+            }
+        })
+    })
+})
 
 </script>
 
@@ -47,6 +83,8 @@ const joinRoom = () => {
                             v-model="username">
                         <input type="text" placeholder="Room Name" class="p-2 outline-none border-2 rounded-lg mt-2"
                             v-model="roomName">
+                        <input type="number" placeholder="Question Count" class="p-2 outline-none border-2 rounded-lg mt-2"
+                            v-model="questionCount" value="20" min="0">
                         <div class="text-sm opacity-70 uppercase border-b-2 mt-4 font-semibold">Question Type</div>
                         <div class="flex flex-col gap-1 mt-3">
                             <div>
