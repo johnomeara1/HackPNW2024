@@ -58,7 +58,7 @@
 
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
-When we first heard the prompt, "Make the Boring Not Boring," we unanimously jumped to the most procrastinated, most mind-numbing, and most boring thing we all had to go through right now and this week: SAT test prep. 
+SATShark was made at HackPNW 2024 Spring Hackathon. When we first heard the prompt, "Make the Boring Not Boring," we unanimously jumped to the most procrastinated, most mind-numbing, and most boring thing we all had to go through right now and this week: SAT prep. 
 We loved online competitive platforms for coding, like Clash of Code or CF or the now-deleted binarysearch.com, and we wondered: how do they turn the mundane task of practicing into something so exciting and still extremely educational? 
 We realized that the ultimate solution to SAT prep was SATShark, an easy-to-use, community multiplayer website where users can make private lobbies, load up a queue of questions, and race to finish all the questions correctly before their friends do.
 It takes inspiration from CodinGame, LeetCode, the College Board, and multiplayer games like Valorant and Apex to create a competition that maximizes attention and incentivizes users to become the best SAT takers they can be and turn SAT testing into an immensely fun experience.
