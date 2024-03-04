@@ -151,10 +151,10 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* [Aditya Bankoti]()
-* [Ian Kim]()
-* [Berkan Mertan]()
-* [John O'Meara]()
+* [Aditya Bankoti](https://github.com/Nano-AI)
+* [Ian Kim](https://github.com/Shrompid)
+* [Berkan Mertan](https://github.com/BerkM125)
+* [John O'Meara](https://github.com/johnomeara1)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
