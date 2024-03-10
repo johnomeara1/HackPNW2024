@@ -81,7 +81,7 @@ It takes inspiration from CodinGame, LeetCode, the College Board, and multiplaye
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Insatll [Node.JS](https://nodejs.org/en), and in each `frontend` and `backend` folder, run `npm i` to install each library. After, run `npm run dev` from each respective end-point to run the dev server.
+Install [Node.JS](https://nodejs.org/en), and in each `frontend` and `backend` folder, run `npm i` to install each library. After, run `npm run dev` from each respective end-point to run the dev server.
 
 Insatll [MongoDB](https://www.mongodb.com/) and import the sample DBs from the `./backend/server/mongo/`
 
@@ -103,7 +103,7 @@ The front end URL should be `https://localhost:5173` and the backend `https://lo
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] AP Exam databse 
+- [ ] AP Exam database 
 - [ ] Online Features 
     - [ ] Chat Feature
 
@@ -116,9 +116,9 @@ See the [open issues](https://github.com/github_username/repo_name/issues) for a
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. We would greatly appreciate any contributions you make.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+If you have a suggestion to improve this, please fork the repo and create a pull request. You can also open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
